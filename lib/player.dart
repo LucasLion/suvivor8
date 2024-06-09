@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/sprite.dart';
+import 'package:suvivor8/bullet.dart';
 import 'package:suvivor8/constants.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 
@@ -44,6 +46,13 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
   void update(double dt) {
     super.update(dt);
     position.add(Vector2(speedX * dt, speedY * dt));
+    //gameRef.add(Bullet(position));
+  }
+
+  @override
+  void onTapDown(TapDownInfo event) {
+    print('onTapDown');
+    gameRef.add(Bullet(position));
   }
 
   void move(double deltaX, double deltaY) {
@@ -91,5 +100,9 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
     );
     return animation = spriteSheet.createAnimation(
         row: row, stepTime: stepTime, from: from, to: to);
+  }
+
+  Bullet shoot() {
+    return Bullet(position);
   }
 }

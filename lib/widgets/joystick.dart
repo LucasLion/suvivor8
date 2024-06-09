@@ -5,7 +5,7 @@ import 'package:flutter_joystick/flutter_joystick.dart';
 class JoystickAreaCustom extends StatefulWidget {
   final Function(double, double) onMove;
 
-  JoystickAreaCustom({required this.onMove});
+  const JoystickAreaCustom({super.key, required this.onMove});
 
   @override
   _JoystickAreaCustomState createState() => _JoystickAreaCustomState();
@@ -24,7 +24,9 @@ class _JoystickAreaCustomState extends State<JoystickAreaCustom>
   @override
   void initState() {
     super.initState();
-    _ticker = createTicker(_update)..start();
+    Future.delayed(Duration(seconds: 1), () {
+      _ticker = createTicker(_update)..start();
+    });
   }
 
   void _update(Duration elapsed) {
