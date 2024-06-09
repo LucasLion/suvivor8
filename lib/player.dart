@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/sprite.dart';
 import 'package:suvivor8/bullet.dart';
 import 'package:suvivor8/constants.dart';
@@ -21,6 +20,8 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
   late SpriteAnimation animationWalkBackRight;
   late SpriteAnimation animationWalkBackLeft;
 
+  Player() : super(size: Vector2(32, 32), position: Vector2(0, 0));
+
   @override
   void onLoad() async {
     super.onLoad();
@@ -37,22 +38,22 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
 
     animation = animationIdleFrontRight;
 
-    size = Vector2(100, 100);
+    size = Vector2(500, 500);
     anchor = Anchor.center;
-    scale = Vector2(2.5, 2.5);
+    //scale = Vector2(4.5, 4.5);
   }
+
+  double timer = 0.0;
 
   @override
   void update(double dt) {
     super.update(dt);
     position.add(Vector2(speedX * dt, speedY * dt));
-    //gameRef.add(Bullet(position));
-  }
-
-  @override
-  void onTapDown(TapDownInfo event) {
-    print('onTapDown');
-    gameRef.add(Bullet(position));
+    timer += dt;
+    if (timer >= .7) {
+      shoot();
+      timer = 0.0;
+    }
   }
 
   void move(double deltaX, double deltaY) {
@@ -103,6 +104,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
   }
 
   Bullet shoot() {
+    gameRef.add(Bullet(position.clone()));
     return Bullet(position);
   }
 }

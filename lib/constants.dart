@@ -7,4 +7,10 @@ String spriteSheetHumanIdle =
 String spriteSheetHumanWalk = 
     'creatures/Base_Humanoids/Human/Base_Human/HumanWalk.png';
     
-String bulletsYellow = 'bullets/All_Fire_Bullet_Pixel_16x16_00.png';
+String spriteSheetDwarfIdle =
+    'creatures/Base_Humanoids/Dwarf/Base_Dwarf/DwarfIdle.png';
+
+String spriteSheetDwarfWalk = 
+    'creatures/Base_Humanoids/Dwarf/Base_Dwarf/DwarfWalk.png';
+    
+String bulletsYellow = 'bullets/All_Fire_Bullet_Pixel_16x16_07.png';

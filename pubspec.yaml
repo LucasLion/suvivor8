@@ -64,6 +64,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/creatures/Base_Humanoids/Human/Base_Human/
+    - assets/images/creatures/Base_Humanoids/Dwarf/Base_Dwarf/
     - assets/images/bullets/
 
   # An image asset can refer to one or more resolution-specific "variants", see

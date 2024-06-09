@@ -21,8 +21,4 @@ class Survivor8Game extends FlameGame<Survivor8World> with TapDetector {
   @override
   Color backgroundColor() => Colors.black;
 
-  @override
-  void onTapDown(TapDownInfo info) {
-    print('onTapDown');
-  }
 }
