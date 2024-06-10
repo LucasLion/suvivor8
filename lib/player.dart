@@ -11,6 +11,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
   double speedY = 0.0;
   final double acceleration = 60.0;
   final double maxSpeed = 200.0; // Vous pouvez ajuster cette valeur
+  late Vector2 last;
   late SpriteAnimation animationIdleFrontRight;
   late SpriteAnimation animationIdleFrontLeft;
   late SpriteAnimation animationIdleBackRight;
@@ -20,13 +21,16 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
   late SpriteAnimation animationWalkBackRight;
   late SpriteAnimation animationWalkBackLeft;
 
-  Player() : super(size: Vector2(32, 32), position: Vector2(0, 0));
+  Player({
+    required Function(double, double) onMove,
+  }) : super(size: Vector2(32, 32), position: Vector2(0, 0));
 
   @override
   void onLoad() async {
     super.onLoad();
 
-    animationIdleFrontRight = await animate(spriteSheetHumanIdle, 0, 0, 16, 0.1);
+    animationIdleFrontRight =
+        await animate(spriteSheetHumanIdle, 0, 0, 16, 0.1);
     animationIdleFrontLeft = await animate(spriteSheetHumanIdle, 1, 0, 16, 0.1);
     animationIdleBackRight = await animate(spriteSheetHumanIdle, 2, 0, 16, 0.1);
     animationIdleBackLeft = await animate(spriteSheetHumanIdle, 3, 0, 16, 0.1);
@@ -35,12 +39,11 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
     animationWalkBackRight = await animate(spriteSheetHumanWalk, 2, 0, 4, 0.1);
     animationWalkBackLeft = await animate(spriteSheetHumanWalk, 3, 0, 4, 0.1);
 
-
     animation = animationIdleFrontRight;
 
-    size = Vector2(500, 500);
+    size = Vector2(200, 200);
     anchor = Anchor.center;
-    //scale = Vector2(4.5, 4.5);
+    last = Vector2(0, 1);
   }
 
   double timer = 0.0;
@@ -50,7 +53,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
     super.update(dt);
     position.add(Vector2(speedX * dt, speedY * dt));
     timer += dt;
-    if (timer >= .7) {
+    if (timer >= .5) {
       shoot();
       timer = 0.0;
     }
@@ -59,6 +62,9 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
   void move(double deltaX, double deltaY) {
     Vector2 direction = Vector2(deltaX, deltaY);
     double magnitude = direction.length;
+    if (deltaX != 0 || deltaY != 0) {
+      last = direction.normalized();
+    }
     if (!direction.isZero()) {
       direction.normalize();
       double baseSpeed = acceleration * magnitude;
@@ -104,7 +110,8 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
   }
 
   Bullet shoot() {
-    gameRef.add(Bullet(position.clone()));
-    return Bullet(position);
+    //Vector2 direction = Vector2(speedX, speedY);
+    gameRef.add(Bullet(position.clone(), last));
+    return Bullet(position, last);
   }
 }

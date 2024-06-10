@@ -5,11 +5,12 @@ import 'package:suvivor8/game/survivor8_game.dart';
 
 class Bullet extends SpriteComponent with HasGameRef<Survivor8Game> {
   late SpriteSheet spriteSheet;
+  late Vector2 direction;
 
-  Bullet(Vector2 position)
+  Bullet(Vector2 position, this.direction)
       : super(
           position: Vector2(position.x, position.y),
-          size: Vector2(64, 64),
+          size: Vector2(32, 32),
         ) {
     anchor = Anchor.center;
   }
@@ -25,7 +26,11 @@ class Bullet extends SpriteComponent with HasGameRef<Survivor8Game> {
   @override
   void update(double dt) {
     super.update(dt);
-    position = position + Vector2(1, 1) * 200 * dt;
+    if (position.x < 0 || position.x > gameRef.size.x ||
+        position.y < 0 || position.y > gameRef.size.y) {
+      removeFromParent();
+    }
+    position = position + direction * 400 * dt;
   }
 
   Future<void> loadSpriteSheet() async {

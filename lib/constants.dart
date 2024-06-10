@@ -4,13 +4,16 @@ const gameHeight = 1920.0;
 String spriteSheetHumanIdle =
     'creatures/Base_Humanoids/Human/Base_Human/HumanIdle.png';
 
-String spriteSheetHumanWalk = 
+String spriteSheetHumanWalk =
     'creatures/Base_Humanoids/Human/Base_Human/HumanWalk.png';
-    
+
 String spriteSheetDwarfIdle =
     'creatures/Base_Humanoids/Dwarf/Base_Dwarf/DwarfIdle.png';
 
-String spriteSheetDwarfWalk = 
+String spriteSheetDwarfWalk =
     'creatures/Base_Humanoids/Dwarf/Base_Dwarf/DwarfWalk.png';
-    
-String bulletsYellow = 'bullets/All_Fire_Bullet_Pixel_16x16_07.png';
+
+String spriteSheetSlimeIdle =
+    'creatures/Slimes/Green_Slime/SlimeGreenIdle.png';
+
+String bulletsYellow = 'bullets/All_Fire_Bullet_Pixel_16x16_02.png';

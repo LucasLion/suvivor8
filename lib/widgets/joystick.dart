@@ -4,8 +4,10 @@ import 'package:flutter_joystick/flutter_joystick.dart';
 
 class JoystickAreaCustom extends StatefulWidget {
   final Function(double, double) onMove;
-
-  const JoystickAreaCustom({super.key, required this.onMove});
+  const JoystickAreaCustom({
+    super.key,
+    required this.onMove,
+  });
 
   @override
   _JoystickAreaCustomState createState() => _JoystickAreaCustomState();

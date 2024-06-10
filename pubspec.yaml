@@ -65,6 +65,7 @@ flutter:
   assets:
     - assets/images/creatures/Base_Humanoids/Human/Base_Human/
     - assets/images/creatures/Base_Humanoids/Dwarf/Base_Dwarf/
+    - assets/images/creatures/Slimes/Green_Slime/
     - assets/images/bullets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
