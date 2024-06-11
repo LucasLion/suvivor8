@@ -1,14 +1,17 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/material.dart';
 import 'package:suvivor8/bullet.dart';
 import 'package:suvivor8/constants.dart';
 import 'package:suvivor8/enemy.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 
-class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game>, CollisionCallbacks {
+class Player extends SpriteAnimationComponent
+    with HasGameRef<Survivor8Game>, CollisionCallbacks {
   double speedX = 0.0;
   double speedY = 0.0;
   final double acceleration = 150.0;
@@ -28,13 +31,13 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game>, Co
   Player({
     required Function(double, double) onMove,
   }) : super(
-          size: Vector2(32, 32),
+          size: Vector2(200, 200),
+          position: Vector2(0, 0),
         );
 
   @override
   void onLoad() async {
     super.onLoad();
-    add(RectangleHitbox());
 
     animationIdleFrontRight =
         await animate(spriteSheetHumanIdle, 0, 0, 16, 0.1);
@@ -48,7 +51,6 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game>, Co
 
     animation = animationIdleFrontRight;
 
-    size = Vector2(200, 200);
     anchor = Anchor.center;
     last = Vector2(0, 1);
   }
@@ -58,7 +60,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game>, Co
     super.update(dt);
     position.add(Vector2(speedX * dt, speedY * dt));
     timer += dt;
-    if (timer >= .5) {
+    if (timer >= .2) {
       shoot();
       timer = 0.0;
     }
@@ -115,16 +117,30 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game>, Co
   }
 
   Bullet shoot() {
-    //Vector2 direction = Vector2(speedX, speedY);
     gameRef.add(Bullet(position, last));
     return Bullet(position, last);
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is Enemy) {
-      removeFromParent();
+      other.removeFromParent();
     }
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+
+    // Dessiner la boîte de collision
+    final debugPaint = Paint()
+      ..color = Colors.red // Rouge
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+
+    final hitbox = RectangleHitbox(anchor: Anchor.topLeft, size: size);
+    canvas.drawRect(hitbox.toRect(), debugPaint);
   }
 }

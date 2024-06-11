@@ -27,10 +27,9 @@ class Bullet extends SpriteAnimationComponent
     super.onLoad();
     position = Vector2(
         position.x + gameRef.size.x / 2, position.y + gameRef.size.y / 2);
-    //add(RectangleHitbox(position: position, anchor: Anchor.center, size: size));
+    add(RectangleHitbox());
     animation = await animate(bulletsYellow, 8, 11, 14, 0.03);
 //    scale = Vector2(16, 16);
-
   }
 
   @override
@@ -61,6 +60,7 @@ class Bullet extends SpriteAnimationComponent
     super.onCollisionStart(intersectionPoints, other);
 
     if (other is Enemy) {
+      print('\x1B[32motherpos: ${other.position}, pos: $position\x1B[0m');
       removeFromParent();
       other.removeFromParent();
     }
@@ -77,10 +77,9 @@ class Bullet extends SpriteAnimationComponent
       ..strokeWidth = 1.0;
 
     final hitbox = RectangleHitbox(
-      position: position,
       size: size,
-      anchor: Anchor.center,
+      anchor: Anchor.topLeft,
     ).toRect();
-    //canvas.drawRect(hitbox, debugPaint);
+    canvas.drawRect(hitbox, debugPaint);
   }
 }

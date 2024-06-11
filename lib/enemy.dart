@@ -22,24 +22,18 @@ class Enemy extends SpriteAnimationComponent
   late SpriteAnimation animationWalkBackLeft;
 
   Enemy(this.pos)
-      : super(size: Vector2(32, 32), position: Vector2(pos.x, pos.y));
+      : super(size: Vector2(200, 200), position: Vector2(pos.x, pos.y), anchor: Anchor.center);
 
   @override
   void onLoad() async {
     super.onLoad();
-    animationWalkFrontRight =
-        await animate(spriteSheetSlimeIdle, 0, 0, 32, 0.3);
+    animationWalkFrontRight = await animate(spriteSheetSlimeIdle, 0, 0, 32, 0.3);
     animationWalkFrontLeft = await animate(spriteSheetSlimeIdle, 1, 0, 32, 0.3);
     animationWalkBackRight = await animate(spriteSheetSlimeIdle, 2, 0, 32, 0.3);
     animationWalkBackLeft = await animate(spriteSheetSlimeIdle, 3, 0, 32, 0.3);
 
     animation = animationWalkFrontRight;
-    size.setValues(200, 200);
-    anchor = Anchor.center;
-    final hitbox =
-        RectangleHitbox(position: Vector2(100, 100), anchor: Anchor.center);
-    add(hitbox);
-    print('hitbox: ${hitbox.toRect()}');
+    add(RectangleHitbox());
   }
 
   @override
@@ -70,8 +64,8 @@ class Enemy extends SpriteAnimationComponent
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is Player || other is Bullet) {
-      print('player pos: ${gameRef.world.player.position} | enemy pos: $position');
+    if (other is Bullet) {
+      //print('\x1B[33mother: $other\x1B[0m');
       removeFromParent();
       other.removeFromParent();
     }
@@ -81,14 +75,13 @@ class Enemy extends SpriteAnimationComponent
   void render(Canvas canvas) {
     super.render(canvas);
 
-    // Dessiner la boîte de collision
     final debugPaint = Paint()
-      ..color = Colors.red // Rouge
+      ..color = Colors.red
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
 
     final hitbox = RectangleHitbox(
-        position: Vector2(100, 100), anchor: Anchor.center, size: size);
-    //canvas.drawRect(hitbox.toRect(), debugPaint);
+        anchor: Anchor.topLeft, size: size);
+    canvas.drawRect(hitbox.toRect(), debugPaint);
   }
 }
