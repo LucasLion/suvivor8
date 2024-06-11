@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:suvivor8/bullet.dart';
@@ -10,8 +11,10 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
   double speedX = 0.0;
   double speedY = 0.0;
   final double acceleration = 60.0;
-  final double maxSpeed = 200.0; // Vous pouvez ajuster cette valeur
+  final double maxSpeed = 60.0; // Vous pouvez ajuster cette valeur
   late Vector2 last;
+  late double timer = 0.0;
+
   late SpriteAnimation animationIdleFrontRight;
   late SpriteAnimation animationIdleFrontLeft;
   late SpriteAnimation animationIdleBackRight;
@@ -28,6 +31,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
   @override
   void onLoad() async {
     super.onLoad();
+    add(RectangleHitbox());
 
     animationIdleFrontRight =
         await animate(spriteSheetHumanIdle, 0, 0, 16, 0.1);
@@ -45,8 +49,6 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
     anchor = Anchor.center;
     last = Vector2(0, 1);
   }
-
-  double timer = 0.0;
 
   @override
   void update(double dt) {
