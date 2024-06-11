@@ -16,4 +16,4 @@ String spriteSheetDwarfWalk =
 String spriteSheetSlimeIdle =
     'creatures/Slimes/Green_Slime/SlimeGreenIdle.png';
 
-String bulletsYellow = 'bullets/All_Fire_Bullet_Pixel_16x16_02.png';
+String bulletsYellow = 'bullets/All_Fire_Bullet_Pixel_16x16_00.png';

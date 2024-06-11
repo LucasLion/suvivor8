@@ -5,13 +5,14 @@ import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:suvivor8/bullet.dart';
 import 'package:suvivor8/constants.dart';
+import 'package:suvivor8/enemy.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 
-class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
+class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game>, CollisionCallbacks {
   double speedX = 0.0;
   double speedY = 0.0;
-  final double acceleration = 60.0;
-  final double maxSpeed = 60.0; // Vous pouvez ajuster cette valeur
+  final double acceleration = 150.0;
+  final double maxSpeed = 150.0; // Vous pouvez ajuster cette valeur
   late Vector2 last;
   late double timer = 0.0;
 
@@ -26,7 +27,9 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
 
   Player({
     required Function(double, double) onMove,
-  }) : super(size: Vector2(32, 32), position: Vector2(0, 0));
+  }) : super(
+          size: Vector2(32, 32),
+        );
 
   @override
   void onLoad() async {
@@ -113,7 +116,15 @@ class Player extends SpriteAnimationComponent with HasGameRef<Survivor8Game> {
 
   Bullet shoot() {
     //Vector2 direction = Vector2(speedX, speedY);
-    gameRef.add(Bullet(position.clone(), last));
+    gameRef.add(Bullet(position, last));
     return Bullet(position, last);
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    if (other is Enemy) {
+      removeFromParent();
+    }
   }
 }

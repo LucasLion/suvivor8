@@ -5,6 +5,8 @@ import 'package:suvivor8/constants.dart';
 import 'package:suvivor8/widgets/joystick.dart';
 
 class GameApp extends StatefulWidget {
+  const GameApp({super.key});
+
   @override
   State createState() => _GameAppState();
 }

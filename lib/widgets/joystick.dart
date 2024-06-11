@@ -26,7 +26,7 @@ class _JoystickAreaCustomState extends State<JoystickAreaCustom>
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       _ticker = createTicker(_update)..start();
     });
   }

@@ -1,17 +1,21 @@
+import 'dart:ui';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/material.dart';
 import 'package:suvivor8/constants.dart';
 import 'package:suvivor8/enemy.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 
-class Bullet extends SpriteComponent
+class Bullet extends SpriteAnimationComponent
     with HasGameRef<Survivor8Game>, CollisionCallbacks {
   late SpriteSheet spriteSheet;
   late Vector2 direction;
 
   Bullet(Vector2 position, this.direction)
       : super(
+          //position: Vector2(position.x, position.y),
           position: Vector2(position.x, position.y),
           size: Vector2(32, 32),
         ) {
@@ -21,10 +25,12 @@ class Bullet extends SpriteComponent
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    add(RectangleHitbox());
     position = Vector2(
         position.x + gameRef.size.x / 2, position.y + gameRef.size.y / 2);
-    await loadSpriteSheet();
+    //add(RectangleHitbox(position: position, anchor: Anchor.center, size: size));
+    animation = await animate(bulletsYellow, 8, 11, 14, 0.03);
+//    scale = Vector2(16, 16);
+
   }
 
   @override
@@ -39,13 +45,14 @@ class Bullet extends SpriteComponent
     position = position + direction * 400 * dt;
   }
 
-  Future<void> loadSpriteSheet() async {
-    final image = await gameRef.images.load(bulletsYellow);
-    spriteSheet = SpriteSheet(
+  dynamic animate(String ss, int row, int from, int to, double stepTime) async {
+    final image = await gameRef.images.load(ss);
+    final spriteSheet = SpriteSheet(
       image: image,
       srcSize: Vector2.all(16),
     );
-    sprite = spriteSheet.getSprite(0, 11);
+    return animation = spriteSheet.createAnimation(
+        row: row, stepTime: stepTime, from: from, to: to);
   }
 
   @override
@@ -57,5 +64,23 @@ class Bullet extends SpriteComponent
       removeFromParent();
       other.removeFromParent();
     }
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+
+    // Dessiner la boîte de collision
+    final debugPaint = Paint()
+      ..color = Colors.green // Rouge
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+
+    final hitbox = RectangleHitbox(
+      position: position,
+      size: size,
+      anchor: Anchor.center,
+    ).toRect();
+    //canvas.drawRect(hitbox, debugPaint);
   }
 }
