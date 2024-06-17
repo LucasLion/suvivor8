@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -60,7 +59,7 @@ class Player extends SpriteAnimationComponent
     super.update(dt);
     position.add(Vector2(speedX * dt, speedY * dt));
     timer += dt;
-    if (timer >= .2) {
+    if (timer >= .05) {
       shoot();
       timer = 0.0;
     }
@@ -128,19 +127,5 @@ class Player extends SpriteAnimationComponent
     if (other is Enemy) {
       other.removeFromParent();
     }
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-
-    // Dessiner la boîte de collision
-    final debugPaint = Paint()
-      ..color = Colors.red // Rouge
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
-
-    final hitbox = RectangleHitbox(anchor: Anchor.topLeft, size: size);
-    canvas.drawRect(hitbox.toRect(), debugPaint);
   }
 }

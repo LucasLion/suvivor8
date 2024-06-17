@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:suvivor8/bullet.dart';
 import 'package:suvivor8/constants.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
-import 'package:suvivor8/player.dart';
 
 class Enemy extends SpriteAnimationComponent
     with HasGameRef<Survivor8Game>, CollisionCallbacks {
@@ -22,7 +20,7 @@ class Enemy extends SpriteAnimationComponent
   late SpriteAnimation animationWalkBackLeft;
 
   Enemy(this.pos)
-      : super(size: Vector2(200, 200), position: Vector2(pos.x, pos.y), anchor: Anchor.center);
+      : super(size: Vector2(32, 32), position: Vector2(pos.x, pos.y), anchor: Anchor.center);
 
   @override
   void onLoad() async {
@@ -32,8 +30,15 @@ class Enemy extends SpriteAnimationComponent
     animationWalkBackRight = await animate(spriteSheetSlimeIdle, 2, 0, 32, 0.3);
     animationWalkBackLeft = await animate(spriteSheetSlimeIdle, 3, 0, 32, 0.3);
 
+    final hitboxSize = Vector2(8, 6);
+    final hitboxPosition = (size - hitboxSize) / 2;
+    final hitbox = RectangleHitbox(
+      size: hitboxSize,
+      position: hitboxPosition,
+    );
+    add(hitbox);
     animation = animationWalkFrontRight;
-    add(RectangleHitbox());
+    scale = Vector2(8, 8);
   }
 
   @override
@@ -53,8 +58,8 @@ class Enemy extends SpriteAnimationComponent
   }
 
   void move(double dt) {
-    final player = gameRef.world.player;
-    final diff = player.position - position;
+    final playerPosition = gameRef.world.player.position + Vector2(gameRef.size.x / 2, gameRef.size.y / 2);
+    final diff = playerPosition - position;
     final diffNormalized = diff.normalized();
     const speed = 50.0;
     position += diffNormalized * speed * dt;
@@ -69,19 +74,5 @@ class Enemy extends SpriteAnimationComponent
       removeFromParent();
       other.removeFromParent();
     }
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-
-    final debugPaint = Paint()
-      ..color = Colors.red
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
-
-    final hitbox = RectangleHitbox(
-        anchor: Anchor.topLeft, size: size);
-    canvas.drawRect(hitbox.toRect(), debugPaint);
   }
 }

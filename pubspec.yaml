@@ -38,6 +38,7 @@ dependencies:
   flame: ^1.18.0
   joystick: ^1.1.0
   flutter_joystick: ^0.0.4
+  flame_tiled: ^1.20.2
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +68,8 @@ flutter:
     - assets/images/creatures/Base_Humanoids/Dwarf/Base_Dwarf/
     - assets/images/creatures/Slimes/Green_Slime/
     - assets/images/bullets/
+    - assets/tiles/
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

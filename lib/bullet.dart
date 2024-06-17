@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -15,9 +14,8 @@ class Bullet extends SpriteAnimationComponent
 
   Bullet(Vector2 position, this.direction)
       : super(
-          //position: Vector2(position.x, position.y),
           position: Vector2(position.x, position.y),
-          size: Vector2(32, 32),
+          size: Vector2(16, 16),
         ) {
     anchor = Anchor.center;
   }
@@ -27,9 +25,14 @@ class Bullet extends SpriteAnimationComponent
     super.onLoad();
     position = Vector2(
         position.x + gameRef.size.x / 2, position.y + gameRef.size.y / 2);
-    add(RectangleHitbox());
-    animation = await animate(bulletsYellow, 8, 11, 14, 0.03);
-//    scale = Vector2(16, 16);
+    final hitboxSize = Vector2(8, 8);
+    final hitboxPosition = (size - hitboxSize) / 2;
+    final hitbox = RectangleHitbox(
+      size: hitboxSize,
+      position: hitboxPosition,
+      collisionType: CollisionType.passive,
+    );
+    add(hitbox);    animation = await animate(bulletsYellow, 8, 11, 14, 0.03);
   }
 
   @override
@@ -66,20 +69,4 @@ class Bullet extends SpriteAnimationComponent
     }
   }
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-
-    // Dessiner la boîte de collision
-    final debugPaint = Paint()
-      ..color = Colors.green // Rouge
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
-
-    final hitbox = RectangleHitbox(
-      size: size,
-      anchor: Anchor.topLeft,
-    ).toRect();
-    canvas.drawRect(hitbox, debugPaint);
-  }
 }
