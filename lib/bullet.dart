@@ -15,7 +15,7 @@ class Bullet extends SpriteAnimationComponent
   Bullet(Vector2 position, this.direction)
       : super(
           position: Vector2(position.x, position.y),
-          size: Vector2(16, 16),
+          size: Vector2(32, 32),
         ) {
     anchor = Anchor.center;
   }
@@ -24,7 +24,7 @@ class Bullet extends SpriteAnimationComponent
   Future<void> onLoad() async {
     super.onLoad();
     position = Vector2(
-        position.x + gameRef.size.x / 2, position.y + gameRef.size.y / 2);
+        position.x,  position.y);
     final hitboxSize = Vector2(8, 8);
     final hitboxPosition = (size - hitboxSize) / 2;
     final hitbox = RectangleHitbox(
@@ -63,7 +63,6 @@ class Bullet extends SpriteAnimationComponent
     super.onCollisionStart(intersectionPoints, other);
 
     if (other is Enemy) {
-      print('\x1B[32motherpos: ${other.position}, pos: $position\x1B[0m');
       removeFromParent();
       other.removeFromParent();
     }

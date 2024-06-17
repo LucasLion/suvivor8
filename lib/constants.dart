@@ -1,5 +1,6 @@
-const gameWidth = 1080.0;
-const gameHeight = 1920.0;
+const double gameWidth = 1080.0;
+const double gameHeight = 1920.0;
+const double worldScale = 32.0;
 
 String spriteSheetHumanIdle =
     'creatures/Base_Humanoids/Human/Base_Human/HumanIdle.png';
@@ -13,7 +14,6 @@ String spriteSheetDwarfIdle =
 String spriteSheetDwarfWalk =
     'creatures/Base_Humanoids/Dwarf/Base_Dwarf/DwarfWalk.png';
 
-String spriteSheetSlimeIdle =
-    'creatures/Slimes/Green_Slime/SlimeGreenIdle.png';
+String spriteSheetSlimeIdle = 'creatures/Slimes/Green_Slime/SlimeGreenIdle.png';
 
 String bulletsYellow = 'bullets/All_Fire_Bullet_Pixel_16x16_00.png';

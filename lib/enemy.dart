@@ -58,7 +58,7 @@ class Enemy extends SpriteAnimationComponent
   }
 
   void move(double dt) {
-    final playerPosition = gameRef.world.player.position + Vector2(gameRef.size.x / 2, gameRef.size.y / 2);
+    final playerPosition = gameRef.world.player.position;
     final diff = playerPosition - position;
     final diffNormalized = diff.normalized();
     const speed = 50.0;

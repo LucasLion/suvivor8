@@ -30,7 +30,7 @@ class Player extends SpriteAnimationComponent
   Player({
     required Function(double, double) onMove,
   }) : super(
-          size: Vector2(200, 200),
+          size: Vector2(8, 8),
           position: Vector2(0, 0),
         );
 
@@ -52,6 +52,7 @@ class Player extends SpriteAnimationComponent
 
     anchor = Anchor.center;
     last = Vector2(0, 1);
+    scale = Vector2(worldScale, worldScale);
   }
 
   @override
@@ -116,7 +117,7 @@ class Player extends SpriteAnimationComponent
   }
 
   Bullet shoot() {
-    gameRef.add(Bullet(position, last));
+    gameRef.world.add(Bullet(position, last));
     return Bullet(position, last);
   }
 
