@@ -55,8 +55,10 @@ class Survivor8GameWidget extends StatelessWidget {
     return Stack(
       children: [
         GameWidget(game: game),
-        JoystickAreaCustom(onMove: (dx, dy) {
-          game.world.player.move(dx, dy);
+        JoystickAreaCustom(onMove: (dx, dy) async {
+          await Future.delayed(const Duration(milliseconds: 10), () {
+            game.world.player.move(dx, dy);
+          });
         }),
       ],
     );

@@ -32,7 +32,8 @@ class Bullet extends SpriteAnimationComponent
       position: hitboxPosition,
       collisionType: CollisionType.passive,
     );
-    add(hitbox);    animation = await animate(bulletsYellow, 8, 11, 14, 0.03);
+    add(hitbox);
+    animation = await animate(bulletsYellow, 8, 11, 14, 0.03);
   }
 
   @override

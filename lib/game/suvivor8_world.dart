@@ -15,8 +15,8 @@ class Survivor8World extends World with HasGameRef<Survivor8Game> {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    final TiledComponent mapComponent =
-        await TiledComponent.load('map.tmx', Vector2.all(worldScale));
+    TiledComponent mapComponent =
+      await TiledComponent.load('map.tmx', Vector2.all(worldScale));
     add(mapComponent);
     add(player);
     gameRef.camera.follow(player);
