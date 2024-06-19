@@ -1,7 +1,9 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:suvivor8/pages/hud.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
-import 'package:suvivor8/constants.dart';
+import 'package:suvivor8/pages/loose_page.dart';
+import 'package:suvivor8/settings.dart';
 import 'package:suvivor8/widgets/joystick.dart';
 
 class GameApp extends StatefulWidget {
@@ -34,7 +36,7 @@ class _GameAppState extends State<GameApp> {
             child: FittedBox(
               child: SizedBox(
                 width: gameWidth,
-                height: gameHeight,
+                height: gameHeight + 1,
                 child: Survivor8GameWidget(),
               ),
             ),
@@ -47,6 +49,7 @@ class _GameAppState extends State<GameApp> {
 
 class Survivor8GameWidget extends StatelessWidget {
   final Survivor8Game game;
+  bool isFirstMove = true;
 
   Survivor8GameWidget({super.key}) : game = Survivor8Game();
 
@@ -54,11 +57,23 @@ class Survivor8GameWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        GameWidget(game: game),
-        JoystickAreaCustom(onMove: (dx, dy) async {
-          await Future.delayed(const Duration(milliseconds: 10), () {
-            game.world.player.move(dx, dy);
-          });
+        GameWidget(
+          game: game,
+          overlayBuilderMap: {
+            'hud': (BuildContext context, Survivor8Game game) {
+              return Ath(player: game.world.player);
+            },
+            'gameOver': (BuildContext context, Survivor8Game game) {
+              return const LooseScreen();
+            },
+          },
+        ),
+        game.overlays.isActive('gameOver') ? Container() : JoystickAreaCustom(onMove: (dx, dy) async {
+          if (isFirstMove) {
+            await Future.delayed(const Duration(milliseconds: 100));
+            isFirstMove = false;
+          }
+          game.world.player.move(dx, dy);
         }),
       ],
     );

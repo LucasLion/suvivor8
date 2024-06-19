@@ -5,9 +5,10 @@ import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:suvivor8/bullet.dart';
-import 'package:suvivor8/constants.dart';
 import 'package:suvivor8/enemy.dart';
+import 'package:suvivor8/settings.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
+import 'package:suvivor8/xp.dart';
 
 class Player extends SpriteAnimationComponent
     with HasGameRef<Survivor8Game>, CollisionCallbacks {
@@ -17,6 +18,11 @@ class Player extends SpriteAnimationComponent
   final double maxSpeed = 150.0; // Vous pouvez ajuster cette valeur
   late Vector2 last;
   late double timer = 0.0;
+  ValueNotifier<int> xpNotifier = ValueNotifier<int>(0);
+  ValueNotifier<int> levelNotifier = ValueNotifier<int>(1);
+  ValueNotifier<int> maxXpNotifier = ValueNotifier<int>(levels[0]);
+  ValueNotifier<int> lifeBarNotifier = ValueNotifier<int>(100);
+  double magneticRadius = 50.0;
 
   late SpriteAnimation animationIdleFrontRight;
   late SpriteAnimation animationIdleFrontLeft;
@@ -38,6 +44,7 @@ class Player extends SpriteAnimationComponent
   void onLoad() async {
     super.onLoad();
 
+    // ---------------- animation -----------------
     animationIdleFrontRight =
         await animate(spriteSheetHumanIdle, 0, 0, 16, 0.1);
     animationIdleFrontLeft = await animate(spriteSheetHumanIdle, 1, 0, 16, 0.1);
@@ -49,6 +56,17 @@ class Player extends SpriteAnimationComponent
     animationWalkBackLeft = await animate(spriteSheetHumanWalk, 3, 0, 4, 0.1);
 
     animation = animationIdleFrontRight;
+    // ---------------- animation -----------------
+
+    // ---------------- hitbox -----------------
+    final hitboxSize = Vector2(2, 2);
+    final hitboxPosition = (size - hitboxSize) / 2;
+    final hitbox = RectangleHitbox(
+      size: hitboxSize,
+      position: hitboxPosition,
+    );
+    add(hitbox);
+    // ---------------- hitbox -----------------
 
     anchor = Anchor.center;
     last = Vector2(0, 1);
@@ -59,10 +77,40 @@ class Player extends SpriteAnimationComponent
   void update(double dt) {
     super.update(dt);
     position.add(Vector2(speedX * dt, speedY * dt));
+    position = Vector2(
+      position.x.clamp(-mapSize / 2 + size.x * worldScale / 8,
+          mapSize / 2 - size.y * worldScale / 8),
+      position.y.clamp(-mapSize / 2 + size.y * worldScale / 8,
+          mapSize / 2 - size.y * worldScale / 8),
+    );
     timer += dt;
-    if (timer >= .05) {
+    print('shootSpeed: $shootSpeed');
+    if (timer >= shootSpeed) {
       shoot();
       timer = 0.0;
+    }
+
+    // ---------------- magnet -----------------
+    gameRef.world.xpList.removeWhere((xp) {
+      if (xp.position.distanceTo(position) < magneticRadius) {
+        final direction = (xp.position - position).normalized();
+        xp.position -= direction * 400 * dt;
+        if (xp.position.distanceTo(position) < size.x) {
+          return true;
+        }
+      }
+      return false;
+    });
+    // ---------------- magnet -----------------
+
+    // ---------------- level up -----------------
+    if (xpNotifier.value >= levels[levelNotifier.value]) {
+      levelUp();
+    }
+
+    // ---------------- Death -----------------
+    if (lifeBarNotifier.value <= 0) {
+      die();
     }
   }
 
@@ -121,12 +169,32 @@ class Player extends SpriteAnimationComponent
     return Bullet(position, last);
   }
 
+  void levelUp() {
+    levelNotifier.value += 1;
+    maxXpNotifier.value = levels[levelNotifier.value];
+    xpNotifier.value = 0;
+    magneticRadius += 20;
+    spawnSpeed *= 0.8;
+    bulletSpeed *= 1.1;
+    shootSpeed *= 0.9;
+  }
+
+  void die() {
+    removeFromParent();
+    game.overlays.add('gameOver');
+  }
+
   @override
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is Enemy) {
+    if (other is Xp) {
       other.removeFromParent();
+      gameRef.world.xpList.remove(other);
+      xpNotifier.value += 1;
+    }
+    if (other is Enemy) {
+      lifeBarNotifier.value -= lifeBarNotifier.value > 0 ? 10 : 0;
     }
   }
 }

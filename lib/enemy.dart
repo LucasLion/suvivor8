@@ -1,11 +1,11 @@
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:suvivor8/bullet.dart';
-import 'package:suvivor8/constants.dart';
+import 'package:suvivor8/settings.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
+import 'package:suvivor8/xp.dart';
 
 class Enemy extends SpriteAnimationComponent
     with HasGameRef<Survivor8Game>, CollisionCallbacks {
@@ -20,15 +20,19 @@ class Enemy extends SpriteAnimationComponent
   late SpriteAnimation animationWalkBackLeft;
 
   Enemy(this.pos)
-      : super(size: Vector2(32, 32), position: Vector2(pos.x, pos.y), anchor: Anchor.center);
+      : super(
+            size: Vector2(32, 32),
+            position: Vector2(pos.x, pos.y),
+            anchor: Anchor.center);
 
   @override
   void onLoad() async {
     super.onLoad();
-    animationWalkFrontRight = await animate(spriteSheetSlimeIdle, 0, 0, 32, 0.3);
-    animationWalkFrontLeft = await animate(spriteSheetSlimeIdle, 1, 0, 32, 0.3);
-    animationWalkBackRight = await animate(spriteSheetSlimeIdle, 2, 0, 32, 0.3);
-    animationWalkBackLeft = await animate(spriteSheetSlimeIdle, 3, 0, 32, 0.3);
+    animationWalkFrontRight =
+        await animate(spriteSheetSlimeIdle, 0, 0, 16, 0.3);
+    // animationWalkFrontLeft = await animate(spriteSheetSlimeIdle, 1, 0, 16, 0.3);
+    // animationWalkBackRight = await animate(spriteSheetSlimeIdle, 2, 0, 16, 0.3);
+    // animationWalkBackLeft = await animate(spriteSheetSlimeIdle, 3, 0, 16, 0.3);
 
     final hitboxSize = Vector2(8, 6);
     final hitboxPosition = (size - hitboxSize) / 2;
@@ -38,13 +42,21 @@ class Enemy extends SpriteAnimationComponent
     );
     add(hitbox);
     animation = animationWalkFrontRight;
-    scale = Vector2(8, 8);
+    scale = Vector2(6, 6);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
     move(dt);
+  }
+
+  void die(other) {
+    Xp xp = Xp(position);
+    gameRef.add(xp);
+    gameRef.world.xpList.add(xp);
+    removeFromParent();
+    other.removeFromParent();
   }
 
   dynamic animate(String ss, int row, int from, int to, double stepTime) async {
@@ -70,9 +82,13 @@ class Enemy extends SpriteAnimationComponent
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is Bullet) {
-      //print('\x1B[33mother: $other\x1B[0m');
-      removeFromParent();
-      other.removeFromParent();
+      die(other);
+    }
+    if (other is Enemy) {
+      final diff = other.position - position;
+      final diffNormalized = diff.normalized();
+      position.x -= diffNormalized.x * 8;
+      position.y -= diffNormalized.y * 6;
     }
   }
 }

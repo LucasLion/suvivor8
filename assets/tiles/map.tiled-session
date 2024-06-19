@@ -5,22 +5,43 @@
     },
     "activeFile": "map.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
     "fileStates": {
+        "": {
+            "scaleInDock": 16,
+            "scaleInEditor": 4
+        },
+        ":/automap-tiles.tsx": {
+            "scaleInDock": 1
+        },
         "map.tmx": {
-            "scale": 0.33,
+            "scale": 4,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1766.666666666667,
-                "y": 1462.121212121212
+                "x": 91.5,
+                "y": 126.125
             }
         },
         "map.tmx#tileset": {
+            "dynamicWrapping": false,
+            "scaleInDock": 4
+        },
+        "map_infinite.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1320,
+                "y": -1988
+            }
+        },
+        "map_infinite.tmx#Minifantasy_ForgottenPlainsMockup": {
             "scaleInDock": 1
         }
     },
     "last.imagePath": "/home/noil/code/suvivor8/assets/images",
+    "map.fixedSize": false,
     "map.height": 400,
     "map.lastUsedFormat": "tmx",
     "map.layerDataFormat": "1",
@@ -32,7 +53,8 @@
     ],
     "project": "map.tiled-project",
     "recentFiles": [
-        "map.tmx"
+        "map.tmx",
+        "map_infinite.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
