@@ -9,6 +9,8 @@ double spawnSpeed = 1.0;
 double bulletSpeed = 300.0;
 double shootSpeed = 0.8;
 
+int enemies = 0;
+
 String spriteSheetHumanIdle =
     'creatures/Base_Humanoids/Human/Base_Human/HumanIdle.png';
 
@@ -28,4 +30,4 @@ String bulletsYellow = 'bullets/All_Fire_Bullet_Pixel_16x16_00.png';
 String xpBlue = 'bullets/All_Fire_Bullet_Pixel_16x16_02.png';
 
 List<int> levels =
-    List<int>.generate(500, (i) => (10 * pow(levelUpSpeed, i)).round());
+    List<int>.generate(500, (i) => (7 * pow(levelUpSpeed, i)).round());

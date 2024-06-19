@@ -59,7 +59,7 @@ class Player extends SpriteAnimationComponent
     // ---------------- animation -----------------
 
     // ---------------- hitbox -----------------
-    final hitboxSize = Vector2(2, 2);
+    final hitboxSize = Vector2(1, 1);
     final hitboxPosition = (size - hitboxSize) / 2;
     final hitbox = RectangleHitbox(
       size: hitboxSize,
@@ -174,9 +174,10 @@ class Player extends SpriteAnimationComponent
     maxXpNotifier.value = levels[levelNotifier.value];
     xpNotifier.value = 0;
     magneticRadius += 20;
-    spawnSpeed *= 0.8;
-    bulletSpeed *= 1.1;
-    shootSpeed *= 0.9;
+    spawnSpeed *= 0.75;
+    bulletSpeed *= bulletSpeed > 600 ? 1.1 : 1;
+    shootSpeed *= shootSpeed > 0.1 ? 0.8 : 1;
+    print('shootSpeed: $shootSpeed');
   }
 
   void die() {

@@ -43,9 +43,10 @@ class Survivor8World extends World with HasGameRef<Survivor8Game> {
     super.update(dt);
     // spawn every 2 seconds
     timer += dt;
-    if (timer >= spawnSpeed) {
+    if (timer >= spawnSpeed && enemies < 100) {
       timer = 0;
       spawnEnemy();
+      enemies += 1;
     }
   }
 

@@ -83,6 +83,7 @@ class Enemy extends SpriteAnimationComponent
     super.onCollisionStart(intersectionPoints, other);
     if (other is Bullet) {
       die(other);
+      enemies -= 1;
     }
     if (other is Enemy) {
       final diff = other.position - position;
