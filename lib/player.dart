@@ -21,7 +21,7 @@ class Player extends SpriteAnimationComponent
   ValueNotifier<int> xpNotifier = ValueNotifier<int>(0);
   ValueNotifier<int> levelNotifier = ValueNotifier<int>(1);
   ValueNotifier<int> maxXpNotifier = ValueNotifier<int>(levels[0]);
-  ValueNotifier<int> lifeBarNotifier = ValueNotifier<int>(10);
+  ValueNotifier<int> lifeBarNotifier = ValueNotifier<int>(100);
   double magneticRadius = 50.0;
 
   late SpriteAnimation animationIdleFrontRight;
