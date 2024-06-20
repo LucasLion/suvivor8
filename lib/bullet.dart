@@ -3,7 +3,6 @@ import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:suvivor8/settings.dart';
-import 'package:suvivor8/enemy.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 
 // class Bullet extends SpriteAnimationComponent

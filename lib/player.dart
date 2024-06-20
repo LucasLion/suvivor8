@@ -21,7 +21,7 @@ class Player extends SpriteAnimationComponent
   ValueNotifier<int> xpNotifier = ValueNotifier<int>(0);
   ValueNotifier<int> levelNotifier = ValueNotifier<int>(1);
   ValueNotifier<int> maxXpNotifier = ValueNotifier<int>(levels[0]);
-  ValueNotifier<int> lifeBarNotifier = ValueNotifier<int>(100);
+  ValueNotifier<int> lifeBarNotifier = ValueNotifier<int>(10);
   double magneticRadius = 50.0;
 
   late SpriteAnimation animationIdleFrontRight;
@@ -84,7 +84,6 @@ class Player extends SpriteAnimationComponent
           mapSize / 2 - size.y * worldScale / 8),
     );
     timer += dt;
-    print('shootSpeed: $shootSpeed');
     if (timer >= shootSpeed) {
       shoot();
       timer = 0.0;
@@ -115,6 +114,8 @@ class Player extends SpriteAnimationComponent
   }
 
   void move(double deltaX, double deltaY) {
+    // final deltaX = gameRef.world.joystick.delta.x;
+    // final deltaY = gameRef.world.joystick.delta.y;
     Vector2 direction = Vector2(deltaX, deltaY);
     double magnitude = direction.length;
     if (deltaX != 0 || deltaY != 0) {
@@ -177,11 +178,11 @@ class Player extends SpriteAnimationComponent
     spawnSpeed *= 0.75;
     bulletSpeed *= bulletSpeed > 600 ? 1.1 : 1;
     shootSpeed *= shootSpeed > 0.1 ? 0.8 : 1;
-    print('shootSpeed: $shootSpeed');
   }
 
   void die() {
     removeFromParent();
+    game.overlays.remove('joystick');
     game.overlays.add('gameOver');
   }
 

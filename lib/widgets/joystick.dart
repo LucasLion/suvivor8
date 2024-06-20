@@ -48,6 +48,14 @@ class _JoystickAreaCustomState extends State<JoystickAreaCustom>
         _targetX = details.x * 10;
         _targetY = details.y * 10;
       },
+      base: const JoystickBase(
+        color: Color.fromARGB(75, 113, 174, 202),
+        size: 350,
+        drawArrows: true,
+      ),
+      stick: const JoystickStick(
+        size: 250,
+      ),
     );
   }
 
