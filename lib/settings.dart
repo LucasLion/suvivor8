@@ -29,5 +29,7 @@ String bulletsYellow = 'bullets/All_Fire_Bullet_Pixel_16x16_00.png';
 
 String xpBlue = 'bullets/All_Fire_Bullet_Pixel_16x16_02.png';
 
+String fireRing = 'bullets/All_Fire_Bullet_Pixel_16x16_07.png';
+
 List<int> levels =
     List<int>.generate(500, (i) => (7 * pow(levelUpSpeed, i)).round());

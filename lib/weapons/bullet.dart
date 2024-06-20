@@ -1,7 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart';
+import 'package:suvivor8/enemy.dart';
 import 'package:suvivor8/settings.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 
@@ -67,5 +67,8 @@ class Bullet extends SpriteComponent
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
+    if (other is Enemy) {
+      removeFromParent();
+    }
   }
 }

@@ -4,10 +4,11 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
-import 'package:suvivor8/bullet.dart';
+import 'package:suvivor8/weapons/bullet.dart';
 import 'package:suvivor8/enemy.dart';
 import 'package:suvivor8/settings.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
+import 'package:suvivor8/weapons/ring.dart';
 import 'package:suvivor8/xp.dart';
 
 class Player extends SpriteAnimationComponent
@@ -43,6 +44,10 @@ class Player extends SpriteAnimationComponent
   @override
   void onLoad() async {
     super.onLoad();
+
+    // ---------------- ring -----------------
+    gameRef.world.add(Ring(position));
+    // ---------------- ring -----------------
 
     // ---------------- animation -----------------
     animationIdleFrontRight =

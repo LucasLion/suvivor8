@@ -2,9 +2,10 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
-import 'package:suvivor8/bullet.dart';
+import 'package:suvivor8/weapons/bullet.dart';
 import 'package:suvivor8/settings.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
+import 'package:suvivor8/weapons/ring.dart';
 import 'package:suvivor8/xp.dart';
 
 class Enemy extends SpriteAnimationComponent
@@ -51,14 +52,6 @@ class Enemy extends SpriteAnimationComponent
     move(dt);
   }
 
-  void die(other) {
-    Xp xp = Xp(position);
-    gameRef.add(xp);
-    gameRef.world.xpList.add(xp);
-    removeFromParent();
-    other.removeFromParent();
-  }
-
   dynamic animate(String ss, int row, int from, int to, double stepTime) async {
     final image = await gameRef.images.load(ss);
     final spriteSheet = SpriteSheet(
@@ -77,11 +70,18 @@ class Enemy extends SpriteAnimationComponent
     position += diffNormalized * speed * dt;
   }
 
+  void die(other) {
+    Xp xp = Xp(position);
+    gameRef.add(xp);
+    gameRef.world.xpList.add(xp);
+    removeFromParent();
+  }
+
   @override
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is Bullet) {
+    if (other is Bullet || other is Ring) {
       die(other);
       enemies -= 1;
     }
