@@ -23,7 +23,7 @@ class Player extends SpriteAnimationComponent
   ValueNotifier<int> xpNotifier = ValueNotifier<int>(0);
   ValueNotifier<int> levelNotifier = ValueNotifier<int>(1);
   ValueNotifier<int> maxXpNotifier = ValueNotifier<int>(levels[0]);
-  ValueNotifier<int> lifeBarNotifier = ValueNotifier<int>(10);
+  ValueNotifier<int> lifeBarNotifier = ValueNotifier<int>(100);
   double magneticRadius = 50.0;
 
   late SpriteAnimation animationIdleFrontRight;
@@ -47,7 +47,13 @@ class Player extends SpriteAnimationComponent
     super.onLoad();
 
     // ---------------- ring -----------------
-    gameRef.world.add(Ring(position));
+
+    final numberOfRings = 8;
+    final fullCircle = 2 * pi;
+    for (var i = 0; i < numberOfRings; i++) {
+      final startingPoint = fullCircle * i / numberOfRings;
+      gameRef.world.add(Ring(position, startingPoint));
+    }
 
     // ---------------- animation -----------------
     animationIdleFrontRight =
@@ -75,7 +81,6 @@ class Player extends SpriteAnimationComponent
     scale = Vector2(worldScale, worldScale);
   }
 
-
   @override
   void update(double dt) {
     super.update(dt);
@@ -83,8 +88,10 @@ class Player extends SpriteAnimationComponent
     // ---------------- movement -----------------
     position.add(Vector2(speedX * dt, speedY * dt));
     position = Vector2(
-      position.x.clamp(-gameRef.world.backgroundImage.width / 2 + size.x, gameRef.world.backgroundImage.height / 2 - size.y),
-      position.y.clamp(-gameRef.world.backgroundImage.width / 2 + size.y, gameRef.world.backgroundImage.height / 2 - size.y),
+      position.x.clamp(-gameRef.world.backgroundImage.width / 2 + size.x,
+          gameRef.world.backgroundImage.height / 2 - size.y),
+      position.y.clamp(-gameRef.world.backgroundImage.width / 2 + size.y,
+          gameRef.world.backgroundImage.height / 2 - size.y),
     );
 
     timer += dt;
@@ -179,6 +186,7 @@ class Player extends SpriteAnimationComponent
     spawnSpeed *= 0.75;
     bulletSpeed *= bulletSpeed > 600 ? 1.1 : 1;
     shootSpeed *= shootSpeed > 0.1 ? 0.8 : 1;
+    game.overlays.add('levelUp');
   }
 
   void die() {
@@ -194,7 +202,7 @@ class Player extends SpriteAnimationComponent
     if (other is Xp) {
       other.removeFromParent();
       gameRef.world.xpList.remove(other);
-      xpNotifier.value += 1;
+      xpNotifier.value += 5;
     }
     if (other is Enemy) {
       lifeBarNotifier.value -= lifeBarNotifier.value > 0 ? 10 : 0;

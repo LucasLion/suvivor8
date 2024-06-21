@@ -69,6 +69,21 @@ class AthState extends State<Ath> {
     );
   }
 
+  Widget pauseButton() {
+    return IconButton(
+      icon: const Icon(Icons.pause),
+      iconSize: 128,
+      color: Colors.white,
+      onPressed: () {
+        if (widget.player.gameRef.paused) {
+          widget.player.gameRef.resumeEngine();
+        } else {
+          widget.player.gameRef.pauseEngine();
+        }
+      },
+    );
+  }
+
   Widget level(TextStyle textStyle) {
     return ValueListenableBuilder<int>(
       valueListenable: widget.player.levelNotifier,
@@ -132,6 +147,7 @@ class AthState extends State<Ath> {
         xpBar(),
         lifeBar(),
         level(textStyle),
+        pauseButton(),
         // xp(),
       ],
     );

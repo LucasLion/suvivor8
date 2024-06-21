@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:suvivor8/pages/hud.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 import 'package:suvivor8/pages/gameover_page.dart';
+import 'package:suvivor8/pages/level_up_page.dart';
 import 'package:suvivor8/pages/loading_page.dart';
 import 'package:suvivor8/settings.dart';
-import 'package:suvivor8/widgets/game_joystick.dart';
 import 'package:suvivor8/widgets/joystick.dart';
 
 class GameApp extends StatefulWidget {
@@ -86,6 +86,9 @@ class Survivor8GameWidgetState extends State<Survivor8GameWidget> {
           },
           'loading': (BuildContext context, Survivor8Game game) {
             return const LoadingPage();
+          },
+          'levelUp': (BuildContext context, Survivor8Game game) {
+            return const LevelUpPage();
           },
           'joystick': (BuildContext context, Survivor8Game game) {
             return JoystickAreaCustom(onMove: (double x, double y) {
