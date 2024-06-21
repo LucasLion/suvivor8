@@ -50,11 +50,11 @@ class _JoystickAreaCustomState extends State<JoystickAreaCustom>
       },
       base: const JoystickBase(
         color: Color.fromARGB(75, 113, 174, 202),
-        size: 350,
+        size: 200,
         drawArrows: true,
       ),
       stick: const JoystickStick(
-        size: 250,
+        size: 12 ,
       ),
     );
   }

@@ -8,8 +8,6 @@ import 'package:suvivor8/widgets/game_joystick.dart';
 
 class Survivor8Game extends FlameGame<Survivor8World>
     with TapDetector, HasCollisionDetection {
-  final ath = 'hud';
-
   Survivor8Game()
       : super(
           world: Survivor8World(),
@@ -21,10 +19,9 @@ class Survivor8Game extends FlameGame<Survivor8World>
   Future<void> onLoad() async {
     super.onLoad();
     add(camera);
-    overlays.add(ath);
+    overlays.add('loading');
   }
 
   @override
   Color backgroundColor() => Colors.black;
-
 }

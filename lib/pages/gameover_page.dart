@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 import 'package:suvivor8/app.dart';
+import 'package:simple_animated_button/simple_animated_button.dart';
 
 class GameoverPage extends StatefulWidget {
   final Function resetGame;
@@ -33,15 +34,25 @@ class GameoverPageState extends State<GameoverPage> {
                 fontSize: 64,
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(top: 20),
-              width: 200,
-              height: 100,
-              child: ElevatedButton(
-                onPressed: () {
-                  widget.resetGame();
-                },
-                child: const Text('Retry', style: TextStyle(fontSize: 48)),
+            ElevatedLayerButton(
+              onClick: () {
+                widget.resetGame();
+              },
+              buttonHeight: 120,
+              buttonWidth: 370,
+              animationDuration: const Duration(seconds: 1),
+              animationCurve: Curves.bounceIn,
+              topDecoration: BoxDecoration(
+                color: Colors.amber,
+                border: Border.all(),
+              ),
+              topLayerChild: const Text(
+                'Reset game',
+                style: TextStyle(fontSize: 64),
+              ),
+              baseDecoration: BoxDecoration(
+                color: Colors.green,
+                border: Border.all(),
               ),
             ),
           ],

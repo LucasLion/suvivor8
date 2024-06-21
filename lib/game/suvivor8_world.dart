@@ -57,14 +57,16 @@ class Survivor8World extends World
       ]),
     );
 
+    game.overlays.remove('loading');
     game.overlays.add('joystick');
+    game.overlays.add('hud');
   }
 
   @override
   void update(double dt) {
     super.update(dt);
     timer += dt;
-    if (timer >= spawnSpeed && enemies < 100) {
+    if (timer >= spawnSpeed && enemies < 250) {
       timer = 0;
       spawnEnemy();
       enemies += 1;
@@ -115,7 +117,8 @@ class Survivor8World extends World
   }
 
   Future<void> _drawWalls(TiledComponent component) async {
-    final walls = component.tileMap.getLayer<ObjectGroup>('walls');
+    // final walls = component.tileMap.getLayer<ObjectGroup>('walls');
+    final houses = component.tileMap.getLayer<ObjectGroup>('houses');
     final SpriteSheet plainsSS = SpriteSheet(
       image: await gameRef.images.load(plainsTileset),
       srcSize: Vector2(8, 8),
@@ -125,29 +128,35 @@ class Survivor8World extends World
       srcSize: Vector2(8, 8),
     );
 
-    for (var wall in walls!.objects) {
-      Vector2 offsetPosition = Vector2(
-        wall.x * 4 - backgroundImage.width / 2,
-        wall.y * 4 - backgroundImage.height / 2,
-      );
-      switch (wall.type) {
-        case 'wall':
-          gameRef.world.add(WallComponent()
-            ..position = offsetPosition
-            ..width = wall.width * 4
-            ..height = wall.height * 4
-            ..debugMode = true
-            ..sprite = plainsSS.getSprite(1, 14));
-          break;
-        case 'wood':
-          gameRef.world.add(SpriteComponent()
-            ..position = offsetPosition
-            ..width = wall.x * 4
-            ..height = wall.y * 4
-            ..debugMode = true
-            ..sprite = townSS.getSprite(19, 5)
-            ..scale = Vector2(4, 4));
-          break;
+    // for (var wall in walls!.objects) {
+    //   Vector2 offsetPosition = Vector2(
+    //     wall.x * 4 - backgroundImage.width / 2,
+    //     wall.y * 4 - backgroundImage.height / 2,
+    //   );
+    //   switch (wall.type) {
+    //     case 'wall':
+    //       gameRef.world.add(WallComponent()
+    //         ..position = offsetPosition
+    //         ..width = wall.width * 4
+    //         ..height = wall.height * 4
+    //         ..debugMode = true
+    //         ..sprite = plainsSS.getSprite(1, 14));
+    //       break;
+    //     case 'wood':
+    //       gameRef.world.add(SpriteComponent()
+    //         ..position = offsetPosition
+    //         ..width = wall.x * 4
+    //         ..height = wall.y * 4
+    //         ..debugMode = true
+    //         ..sprite = townSS.getSprite(19, 5)
+    //         ..scale = Vector2(4, 4));
+    //       break;
+    //   }
+    // }
+    for (var obj in houses!.objects) {
+      switch (obj.type) {
+        case 'stop':
+        //player.die();
       }
     }
   }

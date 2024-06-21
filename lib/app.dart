@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:suvivor8/pages/hud.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 import 'package:suvivor8/pages/gameover_page.dart';
+import 'package:suvivor8/pages/loading_page.dart';
 import 'package:suvivor8/settings.dart';
 import 'package:suvivor8/widgets/game_joystick.dart';
 import 'package:suvivor8/widgets/joystick.dart';
@@ -64,6 +65,10 @@ class Survivor8GameWidgetState extends State<Survivor8GameWidget> {
 
   void resetGame() {
     setState(() {
+      shootSpeed = 0.8;
+      bulletSpeed = 300;
+      spawnSpeed = 1.0;
+      enemies = 0;
       game = Survivor8Game();
     });
   }
@@ -78,6 +83,9 @@ class Survivor8GameWidgetState extends State<Survivor8GameWidget> {
           },
           'gameOver': (BuildContext context, Survivor8Game game) {
             return GameoverPage(resetGame: resetGame);
+          },
+          'loading': (BuildContext context, Survivor8Game game) {
+            return const LoadingPage();
           },
           'joystick': (BuildContext context, Survivor8Game game) {
             return JoystickAreaCustom(onMove: (double x, double y) {
