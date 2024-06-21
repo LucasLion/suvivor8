@@ -4,6 +4,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
+import 'package:suvivor8/components/wall_component.dart';
 import 'package:suvivor8/weapons/bullet.dart';
 import 'package:suvivor8/enemy.dart';
 import 'package:suvivor8/settings.dart';
@@ -15,8 +16,8 @@ class Player extends SpriteAnimationComponent
     with HasGameRef<Survivor8Game>, CollisionCallbacks {
   double speedX = 0.0;
   double speedY = 0.0;
-  final double acceleration = 150.0;
-  final double maxSpeed = 150.0; // Vous pouvez ajuster cette valeur
+  double acceleration = 150.0;
+  final double maxSpeed = 150.0;
   late Vector2 last;
   late double timer = 0.0;
   ValueNotifier<int> xpNotifier = ValueNotifier<int>(0);
@@ -47,7 +48,6 @@ class Player extends SpriteAnimationComponent
 
     // ---------------- ring -----------------
     gameRef.world.add(Ring(position));
-    // ---------------- ring -----------------
 
     // ---------------- animation -----------------
     animationIdleFrontRight =
@@ -59,9 +59,7 @@ class Player extends SpriteAnimationComponent
     animationWalkFrontLeft = await animate(spriteSheetHumanWalk, 1, 0, 4, 0.1);
     animationWalkBackRight = await animate(spriteSheetHumanWalk, 2, 0, 4, 0.1);
     animationWalkBackLeft = await animate(spriteSheetHumanWalk, 3, 0, 4, 0.1);
-
     animation = animationIdleFrontRight;
-    // ---------------- animation -----------------
 
     // ---------------- hitbox -----------------
     final hitboxSize = Vector2(1, 1);
@@ -71,23 +69,24 @@ class Player extends SpriteAnimationComponent
       position: hitboxPosition,
     );
     add(hitbox);
-    // ---------------- hitbox -----------------
 
     anchor = Anchor.center;
     last = Vector2(0, 1);
     scale = Vector2(worldScale, worldScale);
   }
 
+
   @override
   void update(double dt) {
     super.update(dt);
+
+    // ---------------- movement -----------------
     position.add(Vector2(speedX * dt, speedY * dt));
     position = Vector2(
-      position.x.clamp(-mapSize / 2 + size.x * worldScale / 8,
-          mapSize / 2 - size.y * worldScale / 8),
-      position.y.clamp(-mapSize / 2 + size.y * worldScale / 8,
-          mapSize / 2 - size.y * worldScale / 8),
+      position.x.clamp(-gameRef.world.backgroundImage.width / 2 + size.x, gameRef.world.backgroundImage.height / 2 - size.y),
+      position.y.clamp(-gameRef.world.backgroundImage.width / 2 + size.y, gameRef.world.backgroundImage.height / 2 - size.y),
     );
+
     timer += dt;
     if (timer >= shootSpeed) {
       shoot();
@@ -105,7 +104,6 @@ class Player extends SpriteAnimationComponent
       }
       return false;
     });
-    // ---------------- magnet -----------------
 
     // ---------------- level up -----------------
     if (xpNotifier.value >= levels[levelNotifier.value]) {
@@ -119,8 +117,6 @@ class Player extends SpriteAnimationComponent
   }
 
   void move(double deltaX, double deltaY) {
-    // final deltaX = gameRef.world.joystick.delta.x;
-    // final deltaY = gameRef.world.joystick.delta.y;
     Vector2 direction = Vector2(deltaX, deltaY);
     double magnitude = direction.length;
     if (deltaX != 0 || deltaY != 0) {

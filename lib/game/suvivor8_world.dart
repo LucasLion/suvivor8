@@ -1,9 +1,12 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
-import 'package:flame/flame.dart';
+import 'package:flame/sprite.dart';
+import 'package:flame_tiled/flame_tiled.dart';
+import 'package:suvivor8/components/wall_component.dart';
 import 'package:suvivor8/settings.dart';
 import 'package:suvivor8/enemy.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
@@ -21,46 +24,40 @@ class Survivor8World extends World
   late PositionComponent joystickWrapper;
   late Vector2 joystickPosition;
   late Vector2 touchPosition;
+  late Image backgroundImage;
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    canvas.drawImage(
+        backgroundImage,
+        Offset(-backgroundImage.width / 2, -backgroundImage.height / 2),
+        Paint());
+  }
 
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    // TiledComponent component =
-    //   await TiledComponent.load('bigmap.tmx', Vector2.all(worldScale));
-    // add(component);
-    game.overlays.add('joystick');
-    // joystick = GameJoystick();
-    final image = await Flame.images.load('map.png');
-    final sprite = Sprite(image);
-    final size = Vector2(mapSize, mapSize);
-    final map = SpriteComponent(sprite: sprite, size: size);
-    map.position = Vector2(-mapSize / 2, -mapSize / 2);
-    gameRef.world.add(map);
+
+    final TiledComponent tiledComponent = await TiledComponent.load(
+      'map.tmx',
+      Vector2.all(worldScale),
+    );
+
+    await _drawBackground(tiledComponent);
+    await _drawWalls(tiledComponent);
     gameRef.world.add(player);
     gameRef.camera.follow(player);
     gameRef.camera.setBounds(
       Polygon([
-        Vector2(-mapSize / 2 + gameRef.size.x / 2,
-            -mapSize / 2 + gameRef.size.y / 2),
-        Vector2(mapSize / 2 - gameRef.size.x / 2,
-            -mapSize / 2 + gameRef.size.y / 2),
-        Vector2(
-            mapSize / 2 - gameRef.size.x / 2, mapSize / 2 - gameRef.size.y / 2),
-        Vector2(-mapSize / 2 + gameRef.size.x / 2,
-            mapSize / 2 - gameRef.size.y / 2),
+        Vector2(-backgroundImage.width / 2, -backgroundImage.height / 2),
+        Vector2(backgroundImage.width / 2, -backgroundImage.height / 2),
+        Vector2(backgroundImage.width / 2, backgroundImage.height / 2),
+        Vector2(-backgroundImage.width / 2, backgroundImage.height / 2),
       ]),
     );
 
-    // ---------------------- joystick ----------------------
-    // print('x: ${gameRef.size.x / 2}, y: ${gameRef.size.y}');
-    // joystickSize = Vector2(gameRef.size.x / 2 - 50, gameRef.size.y / 2 - 100);
-    // joystickPosition = Vector2(0, 0);
-    // joystickWrapper =
-    //     PositionComponent(size: joystickSize, position: joystickPosition);
-    // joystickWrapper.add(joystick);
-    // gameRef.world.add(joystickWrapper);
-    // touchPosition = Vector2(0, 0);
-    // ---------------------- joystick ----------------------
+    game.overlays.add('joystick');
   }
 
   @override
@@ -72,9 +69,6 @@ class Survivor8World extends World
       spawnEnemy();
       enemies += 1;
     }
-    // joystickWrapper.position = Vector2(gameRef.camera.viewfinder.position.x,
-    //     gameRef.camera.viewfinder.position.y);
-    // joystickWrapper.position = Vector2(touchPosition.x - gameRef.size.x/2, touchPosition.y - gameRef.size.x/2;
   }
 
   void spawnEnemy() {
@@ -111,26 +105,50 @@ class Survivor8World extends World
     gameRef.world.add(Enemy(randomPosition));
   }
 
-  // @override
-  // void onTapDown(TapDownEvent event) {
-  //   super.onTapDown(event);
-  //   touchPosition = event.localPosition;
-  //   print('touchposition: $touchPosition');
-  // }
+  Future<void> _drawBackground(TiledComponent component) async {
+    final recorder = PictureRecorder();
+    final canvas = Canvas(recorder);
+    component.render(canvas);
+    final picture = recorder.endRecording();
+    backgroundImage = await picture.toImage(
+        (component.width).toInt(), (component.height).toInt());
+  }
 
-  // @override
-  // void onTapUp(TapUpEvent event) {
-  //   super.onTapUp(event);
-  //   print('coucou');
-  //   joystickWrapper.position = Vector2(0, 0);
-  //   touchPosition = Vector2(0, 0);
-  // }
+  Future<void> _drawWalls(TiledComponent component) async {
+    final walls = component.tileMap.getLayer<ObjectGroup>('walls');
+    final SpriteSheet plainsSS = SpriteSheet(
+      image: await gameRef.images.load(plainsTileset),
+      srcSize: Vector2(8, 8),
+    );
+    final SpriteSheet townSS = SpriteSheet(
+      image: await gameRef.images.load(townTileset),
+      srcSize: Vector2(8, 8),
+    );
 
-  // @override
-  // void onTapCancel(TapCancelEvent event) {
-  //   super.onTapCancel(event);
-  //   print('coucou');
-  //   joystickWrapper.position = Vector2(0, 0);
-  //   touchPosition = Vector2(0, 0);
-  // }
+    for (var wall in walls!.objects) {
+      Vector2 offsetPosition = Vector2(
+        wall.x * 4 - backgroundImage.width / 2,
+        wall.y * 4 - backgroundImage.height / 2,
+      );
+      switch (wall.type) {
+        case 'wall':
+          gameRef.world.add(WallComponent()
+            ..position = offsetPosition
+            ..width = wall.width * 4
+            ..height = wall.height * 4
+            ..debugMode = true
+            ..sprite = plainsSS.getSprite(1, 14));
+          break;
+        case 'wood':
+          gameRef.world.add(SpriteComponent()
+            ..position = offsetPosition
+            ..width = wall.x * 4
+            ..height = wall.y * 4
+            ..debugMode = true
+            ..sprite = townSS.getSprite(19, 5)
+            ..scale = Vector2(4, 4));
+          break;
+      }
+    }
+  }
 }

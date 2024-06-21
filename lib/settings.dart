@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flame/sprite.dart';
+
 const double gameWidth = 1080.0;
 const double gameHeight = 1920.0;
 const double worldScale = 32.0;
@@ -30,6 +32,12 @@ String bulletsYellow = 'bullets/All_Fire_Bullet_Pixel_16x16_00.png';
 String xpBlue = 'bullets/All_Fire_Bullet_Pixel_16x16_02.png';
 
 String fireRing = 'bullets/All_Fire_Bullet_Pixel_16x16_07.png';
+
+String plainsTileset =
+    'forgotten_plains/Minifantasy_ForgottenPlains_Assets/Tileset/Minifantasy_ForgottenPlainsTiles.png';
+
+String townTileset =
+    'towns/Minifantasy_Towns_Assets/Tileset/Minifantasy_TownsTileset.png';
 
 List<int> levels =
     List<int>.generate(500, (i) => (7 * pow(levelUpSpeed, i)).round());

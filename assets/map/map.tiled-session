@@ -1,0 +1,55 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "/home/noil/code/suvivor8/assets/tiles/map.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "": {
+            "scaleInEditor": 4
+        },
+        "/home/noil/code/suvivor8/assets/tiles/map.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 1624,
+                "y": 1304
+            }
+        },
+        "/home/noil/code/suvivor8/assets/tiles/map.tmx#tileset": {
+            "scaleInDock": 2
+        },
+        "map.tmx": {
+            "scale": 1.4950625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 399.9832782910414,
+                "y": 400.3177124702145
+            }
+        },
+        "map.tmx#tileset": {
+            "scaleInDock": 8
+        }
+    },
+    "last.imagePath": "/home/noil/code/suvivor8/assets/images/forgotten_plains/Minifantasy_ForgottenPlains_Assets/Tileset",
+    "map.height": 100,
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": "1",
+    "map.tileHeight": 8,
+    "map.tileWidth": 8,
+    "map.width": 100,
+    "openFiles": [
+        "/home/noil/code/suvivor8/assets/tiles/map.tmx"
+    ],
+    "project": "map.tiled-project",
+    "recentFiles": [
+        "/home/noil/code/suvivor8/assets/tiles/map.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 8,
+        "width": 8
+    }
+}

@@ -65,6 +65,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/creatures/Base_Humanoids/Human/Base_Human/
+    - assets/images/forgotten_plains/Minifantasy_ForgottenPlains_Assets/Tileset/
+    - assets/images/towns/Minifantasy_Towns_Assets/Tileset/
     - assets/images/creatures/Base_Humanoids/Dwarf/Base_Dwarf/
     - assets/images/creatures/Slimes/Green_Slime/
     - assets/images/bullets/
