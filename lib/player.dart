@@ -4,12 +4,12 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
-import 'package:suvivor8/components/wall_component.dart';
-import 'package:suvivor8/weapons/bullet.dart';
+import 'package:suvivor8/weapons/machine_gun.dart';
 import 'package:suvivor8/enemy.dart';
 import 'package:suvivor8/settings.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 import 'package:suvivor8/weapons/ring.dart';
+import 'package:suvivor8/weapons/weapon.dart';
 import 'package:suvivor8/xp.dart';
 
 class Player extends SpriteAnimationComponent
@@ -21,10 +21,14 @@ class Player extends SpriteAnimationComponent
   late Vector2 last;
   late double timer = 0.0;
   ValueNotifier<int> xpNotifier = ValueNotifier<int>(0);
-  ValueNotifier<int> levelNotifier = ValueNotifier<int>(1);
+  ValueNotifier<int> levelNotifier = ValueNotifier<int>(10);
   ValueNotifier<int> maxXpNotifier = ValueNotifier<int>(levels[0]);
   ValueNotifier<int> lifeBarNotifier = ValueNotifier<int>(100);
   double magneticRadius = 50.0;
+  final weapons = <Weapon>[];
+  late List<Xp> xpList = [];
+  late Set<Xp> xpToRemove = {};
+  late MachineGun machineGun;
 
   late SpriteAnimation animationIdleFrontRight;
   late SpriteAnimation animationIdleFrontLeft;
@@ -47,13 +51,12 @@ class Player extends SpriteAnimationComponent
     super.onLoad();
 
     // ---------------- ring -----------------
-
-    final numberOfRings = 8;
-    final fullCircle = 2 * pi;
-    for (var i = 0; i < numberOfRings; i++) {
-      final startingPoint = fullCircle * i / numberOfRings;
-      gameRef.world.add(Ring(position, startingPoint));
-    }
+    // const numberOfRings = 8;
+    // const fullCircle = 2 * pi;
+    // for (var i = 0; i < numberOfRings; i++) {
+    //   final startingPoint = fullCircle * i / numberOfRings;
+    //   gameRef.world.add(Ring(position, startingPoint));
+    // }
 
     // ---------------- animation -----------------
     animationIdleFrontRight =
@@ -79,6 +82,16 @@ class Player extends SpriteAnimationComponent
     anchor = Anchor.center;
     last = Vector2(0, 1);
     scale = Vector2(worldScale, worldScale);
+
+    // ---------------- first weapon -----------------
+    final image = await gameRef.images.load(bulletsYellow);
+    final spriteSheet = SpriteSheet(
+      image: image,
+      srcSize: Vector2(16, 16),
+    );
+    machineGun = MachineGun(position, spriteSheet, last);
+    weapons.add(machineGun);
+    gameRef.world.add(machineGun);
   }
 
   @override
@@ -94,14 +107,8 @@ class Player extends SpriteAnimationComponent
           gameRef.world.backgroundImage.height / 2 - size.y),
     );
 
-    timer += dt;
-    if (timer >= shootSpeed) {
-      shoot();
-      timer = 0.0;
-    }
-
     // ---------------- magnet -----------------
-    gameRef.world.xpList.removeWhere((xp) {
+    xpList.removeWhere((xp) {
       if (xp.position.distanceTo(position) < magneticRadius) {
         final direction = (xp.position - position).normalized();
         xp.position -= direction * 400 * dt;
@@ -117,6 +124,12 @@ class Player extends SpriteAnimationComponent
       levelUp();
     }
 
+    // ---------------- remove xp -----------------
+    xpToRemove.forEach((xp) {
+      xp.removeFromParent();
+      xpList.remove(xp);
+    });
+    xpToRemove.clear();
     // ---------------- Death -----------------
     if (lifeBarNotifier.value <= 0) {
       die();
@@ -128,6 +141,9 @@ class Player extends SpriteAnimationComponent
     double magnitude = direction.length;
     if (deltaX != 0 || deltaY != 0) {
       last = direction.normalized();
+      machineGun.position = position;
+      machineGun.dir = last;
+      // machineGun.updateLast(last, position);
     }
     if (!direction.isZero()) {
       direction.normalize();
@@ -173,10 +189,15 @@ class Player extends SpriteAnimationComponent
         row: row, stepTime: stepTime, from: from, to: to);
   }
 
-  Bullet shoot() {
-    gameRef.world.add(Bullet(position, last));
-    return Bullet(position, last);
-  }
+  // Future<MachineGun> shoot() async {
+  //   final image = await gameRef.images.load(bulletsYellow);
+  //   final ss = SpriteSheet(
+  //     image: image,
+  //     srcSize: Vector2(16, 16),
+  //   );
+  //   gameRef.world.add(MachineGun(position, ss, last));
+  //   return MachineGun(position, ss, last);
+  // }
 
   void levelUp() {
     levelNotifier.value += 1;
@@ -186,11 +207,13 @@ class Player extends SpriteAnimationComponent
     spawnSpeed *= 0.75;
     bulletSpeed *= bulletSpeed > 600 ? 1.1 : 1;
     shootSpeed *= shootSpeed > 0.1 ? 0.8 : 1;
-    game.overlays.add('levelUp');
+    //game.overlays.add('levelUp');
   }
 
   void die() {
     removeFromParent();
+    // pause engine
+    gameRef.pauseEngine();
     game.overlays.remove('joystick');
     game.overlays.add('gameOver');
   }
@@ -201,8 +224,9 @@ class Player extends SpriteAnimationComponent
     super.onCollisionStart(intersectionPoints, other);
     if (other is Xp) {
       other.removeFromParent();
-      gameRef.world.xpList.remove(other);
-      xpNotifier.value += 5;
+      // xpList.remove(other);
+      xpToRemove.add(other);
+      xpNotifier.value += 10;
     }
     if (other is Enemy) {
       lifeBarNotifier.value -= lifeBarNotifier.value > 0 ? 10 : 0;

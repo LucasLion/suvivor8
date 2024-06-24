@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:suvivor8/game/survivor8_game.dart';
-import 'package:suvivor8/app.dart';
 import 'package:simple_animated_button/simple_animated_button.dart';
 
 class GameoverPage extends StatefulWidget {

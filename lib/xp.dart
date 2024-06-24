@@ -25,7 +25,7 @@ class Xp extends SpriteComponent
     sprite = spriteSheet.getSprite(5, 11);
     gameRef.world.add(this);
 
-    final hitboxSize = Vector2(4, 4);
+    final hitboxSize = Vector2(32, 32);
     final hitboxPosition = (size - hitboxSize) / 2;
     final hitbox = RectangleHitbox(
       size: hitboxSize,
@@ -36,17 +36,4 @@ class Xp extends SpriteComponent
     scale = Vector2(2, 2);
   }
   
-  // @override
-  // void render(Canvas canvas) {
-  //   super.render(canvas);
-
-  //   final debugPaint = Paint()
-  //     ..color = Colors.red
-  //     ..style = PaintingStyle.stroke
-  //     ..strokeWidth = 1.0;
-
-  //   final hitbox = RectangleHitbox(
-  //       anchor: Anchor.topLeft, size: size);
-  //   canvas.drawRect(hitbox.toRect(), debugPaint);
-  // }
 }

@@ -13,6 +13,7 @@ class Ring extends SpriteComponent
   late SpriteSheet spriteSheet;
   Vector2 playerPosition;
   double radius = 150;
+  @override
   double angle = 0;
   double speed = 0.01;
 

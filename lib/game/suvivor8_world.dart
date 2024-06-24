@@ -6,7 +6,6 @@ import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:suvivor8/components/wall_component.dart';
 import 'package:suvivor8/settings.dart';
 import 'package:suvivor8/enemy.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
@@ -18,7 +17,6 @@ class Survivor8World extends World
     with HasGameRef<Survivor8Game>, TapCallbacks {
   final Player player = Player(onMove: (double x, double y) {});
   late double timer = 0;
-  late List<Xp> xpList = [];
   late final GameJoystick joystick;
   late Vector2 joystickSize;
   late PositionComponent joystickWrapper;
@@ -66,7 +64,7 @@ class Survivor8World extends World
   void update(double dt) {
     super.update(dt);
     timer += dt;
-    if (timer >= spawnSpeed && enemies < 1150) {
+    if (timer >= spawnSpeed && enemies < 150) {
       timer = 0;
       spawnEnemy();
       enemies += 1;

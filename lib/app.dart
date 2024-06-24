@@ -32,7 +32,7 @@ class _GameAppState extends State<GameApp> {
         scaffoldBackgroundColor: Colors.black,
       ),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
+      home: const Scaffold(
         body: SafeArea(
           child: Center(
             child: FittedBox(
@@ -88,7 +88,8 @@ class Survivor8GameWidgetState extends State<Survivor8GameWidget> {
             return const LoadingPage();
           },
           'levelUp': (BuildContext context, Survivor8Game game) {
-            return const LevelUpPage();
+            game.world.player.gameRef.pauseEngine();
+            return LevelUpPage(game: game);
           },
           'joystick': (BuildContext context, Survivor8Game game) {
             return JoystickAreaCustom(onMove: (double x, double y) {

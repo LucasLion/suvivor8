@@ -1,8 +1,8 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart';
 import 'package:suvivor8/weapons/bullet.dart';
+import 'package:suvivor8/weapons/machine_gun.dart';
 import 'package:suvivor8/settings.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 import 'package:suvivor8/weapons/ring.dart';
@@ -73,7 +73,7 @@ class Enemy extends SpriteAnimationComponent
   void die(other) {
     Xp xp = Xp(position);
     gameRef.add(xp);
-    gameRef.world.xpList.add(xp);
+    gameRef.world.player.xpList.add(xp);
     removeFromParent();
   }
 

@@ -1,7 +1,5 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:suvivor8/settings.dart';
 import 'package:suvivor8/player.dart';
 
 class Ath extends StatefulWidget {

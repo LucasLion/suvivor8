@@ -1,12 +1,11 @@
 import 'dart:math';
 
-import 'package:flame/sprite.dart';
 
 const double gameWidth = 1080.0;
 const double gameHeight = 1920.0;
 const double worldScale = 32.0;
 const double levelUpSpeed = 1.1;
-double spawnSpeed = 1.0;
+double spawnSpeed = .5;
 double bulletSpeed = 300.0;
 double shootSpeed = 0.8;
 
