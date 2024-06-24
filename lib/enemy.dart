@@ -31,10 +31,6 @@ class Enemy extends SpriteAnimationComponent
     super.onLoad();
     animationWalkFrontRight =
         await animate(spriteSheetSlimeIdle, 0, 0, 16, 0.3);
-    // animationWalkFrontLeft = await animate(spriteSheetSlimeIdle, 1, 0, 16, 0.3);
-    // animationWalkBackRight = await animate(spriteSheetSlimeIdle, 2, 0, 16, 0.3);
-    // animationWalkBackLeft = await animate(spriteSheetSlimeIdle, 3, 0, 16, 0.3);
-
     final hitboxSize = Vector2(8, 6);
     final hitboxPosition = (size - hitboxSize) / 2;
     final hitbox = RectangleHitbox(
@@ -43,7 +39,7 @@ class Enemy extends SpriteAnimationComponent
     );
     add(hitbox);
     animation = animationWalkFrontRight;
-    scale = Vector2(6, 6);
+    scale = Vector2(4, 4);
   }
 
   @override

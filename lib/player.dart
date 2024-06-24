@@ -42,7 +42,7 @@ class Player extends SpriteAnimationComponent
   Player({
     required Function(double, double) onMove,
   }) : super(
-          size: Vector2(8, 8),
+          size: Vector2(32, 32),
           position: Vector2(0, 0),
         );
 
@@ -71,7 +71,7 @@ class Player extends SpriteAnimationComponent
     animation = animationIdleFrontRight;
 
     // ---------------- hitbox -----------------
-    final hitboxSize = Vector2(1, 1);
+    final hitboxSize = Vector2(6, 6);
     final hitboxPosition = (size - hitboxSize) / 2;
     final hitbox = RectangleHitbox(
       size: hitboxSize,
@@ -81,7 +81,7 @@ class Player extends SpriteAnimationComponent
 
     anchor = Anchor.center;
     last = Vector2(0, 1);
-    scale = Vector2(worldScale, worldScale);
+    scale = Vector2(4, 4);
 
     // ---------------- first weapon -----------------
     final image = await gameRef.images.load(bulletsYellow);

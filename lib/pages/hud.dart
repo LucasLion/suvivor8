@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:suvivor8/player.dart';
 
@@ -144,9 +143,10 @@ class AthState extends State<Ath> {
       children: [
         xpBar(),
         lifeBar(),
-        level(textStyle),
-        pauseButton(),
-        // xp(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [level(textStyle), pauseButton()],
+        )
       ],
     );
   }
