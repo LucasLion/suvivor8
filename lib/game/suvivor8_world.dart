@@ -64,7 +64,7 @@ class Survivor8World extends World
   void update(double dt) {
     super.update(dt);
     timer += dt;
-    if (timer >= spawnSpeed && enemies < 1150) {
+    if (timer >= spawnSpeed) {//} && enemies < 1150) {
       timer = 0;
       spawnEnemy();
       enemies += 1;
