@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:suvivor8/player.dart';
+import 'package:suvivor8/game/player.dart';
 
 class Ath extends StatefulWidget {
   final Player player;

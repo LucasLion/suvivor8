@@ -1,15 +1,21 @@
+import 'dart:math';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/sprite.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
-import 'package:suvivor8/settings.dart';
+import 'package:suvivor8/game/settings.dart';
 
 class Bullet extends SpriteComponent
     with HasGameRef<Survivor8Game>, CollisionCallbacks {
   late Vector2 direction;
   late RectangleHitbox hitbox;
+  late BulletMoveType moveType;
+  double radius = 150;
+  double fullCircle = 2 * pi;
+  double initialAngle;
+  double rotationSpeed = 1.0;
 
-  Bullet(Vector2 position, this.direction, Sprite sprite)
+  Bullet(Vector2 position, this.direction, Sprite sprite, this.moveType, this.initialAngle, this.rotationSpeed)
       : super(
           position: Vector2(position.x, position.y),
           sprite: sprite,
@@ -37,12 +43,16 @@ class Bullet extends SpriteComponent
   void update(double dt) {
     super.update(dt);
 
-    if (position.x < gameRef.world.player.position.x - gameRef.size.x ||
-        position.x > gameRef.size.x + gameRef.world.player.position.x ||
-        position.y < gameRef.world.player.position.y - gameRef.size.y ||
-        position.y > gameRef.size.y + gameRef.world.player.position.y) {
-      removeFromParent();
+    switch (moveType) {
+      case BulletMoveType.straight:
+        position = position + direction * bulletSpeed * dt;
+        break;
+      case BulletMoveType.spin:
+        angle += dt * rotationSpeed;
+        double currentAngle = initialAngle + rotationSpeed * dt;
+        Vector2 playerPosition = gameRef.world.player.position;
+        position = playerPosition + Vector2(radius * cos(angle + currentAngle), radius * sin(angle + currentAngle));
+        break;
     }
-    position = position + direction * bulletSpeed * dt;
   }
 }

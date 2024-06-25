@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
-import 'package:suvivor8/settings.dart';
+import 'package:suvivor8/game/settings.dart';
+import 'package:suvivor8/game/upgrade.dart';
 
 class LevelUpPage extends StatefulWidget {
   final Survivor8Game game;
@@ -10,42 +11,34 @@ class LevelUpPage extends StatefulWidget {
   LevelUpPageState createState() => LevelUpPageState();
 }
 
-class LevelUpPageState extends State<LevelUpPage> with SingleTickerProviderStateMixin{
-  late AnimationController _controller;
-  late Animation<double> _animation;
+class LevelUpPageState extends State<LevelUpPage>
+    with SingleTickerProviderStateMixin {
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 3),
-      vsync: this,
-    );
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller)
-      ..addListener(() {
-        setState(() {});
-      });
+  List<Upgrade> getRandomUpgrades(int count) {
+    upgrades.shuffle();
+    return upgrades.take(count).toList();
   }
 
-  Widget _item(BuildContext context, Color color) {
+  Widget _item(BuildContext context, Upgrade upgrade) {
     return InkWell(
       onTap: () {
+        upgrade.action(widget.game);
         widget.game.overlays.remove('levelUp');
         widget.game.world.player.gameRef.resumeEngine();
       },
       child: Container(
           decoration: BoxDecoration(
-              border: Border.all(color: Colors.amber, width: 4),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: const Offset(0, 0),
-                ),
-              ],
-              borderRadius: BorderRadius.circular(8),
-              color: Color(0xff649173),
+            border: Border.all(color: Colors.amber, width: 4),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 0),
+              ),
+            ],
+            borderRadius: BorderRadius.circular(8),
+            color: const Color(0xff649173),
           ),
           width: gameWidth * 0.75,
           height: gameHeight * 0.15,
@@ -57,55 +50,60 @@ class LevelUpPageState extends State<LevelUpPage> with SingleTickerProviderState
                 mainAxisAlignment:
                     MainAxisAlignment.spaceAround, // Ajustez selon vos besoins
                 children: [
-                  _image(),
+                  _image(upgrade.image),
                   Expanded(
-                    flex: 1, // _title() prendra une portion d'espace
-                    child: _text('title'),
+                    flex: 1,
+                    child: _text(upgrade.name),
                   ),
                   Expanded(
                     flex:
-                        1, // _level() prendra une portion d'espace égale à celle de _title()
-                    child: _text('level'),
+                        1,
+                    child: _text(upgrade.id),
                   ),
                 ],
               ),
-              _text('description'),
+              _text(upgrade.description),
             ],
           )),
     );
   }
 
   Widget _text(String text) {
-    return const Text(
-      'Title',
+    return Text(
+      text,
       textAlign: TextAlign.center,
+      style: const TextStyle(
+        fontSize: 40,
+      )
     );
   }
 
-  Widget _image() {
+  Widget _image(AssetImage image) {
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.amber, width: 4),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 0),
-            ),
-          ],
-          borderRadius: BorderRadius.circular(8),
-          color: Color(0xff649173),
+        border: Border.all(color: Colors.amber, width: 4),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(0, 0),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(8),
+        color: const Color(0xff649173),
       ),
       width: 150,
       height: 150,
       margin: const EdgeInsets.all(15),
-      child: const Text('Weapon 1'),
+      child: Image(image: image),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Upgrade> selectedUpgrades = getRandomUpgrades(3);
+
     return Center(
       child: AnimatedContainer(
         duration: const Duration(seconds: 3),
@@ -114,29 +112,21 @@ class LevelUpPageState extends State<LevelUpPage> with SingleTickerProviderState
         decoration: BoxDecoration(
           border: Border.all(color: Colors.amber, width: 4),
           borderRadius: BorderRadius.circular(8),
-          color: Color(0xff649173),
+          color: const Color(0xff649173),
         ),
-        child: Container(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Spacer(),
-                const Text("Level Up",
-                    style: TextStyle(fontSize: 30, color: Colors.white)),
-                Spacer(),
-                _item(context, Colors.red),
-                _item(context, Colors.green),
-                _item(context, Colors.blue),
-              ]),
-        ),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Spacer(),
+              const Text("Level Up",
+                  style: TextStyle(fontSize: 60, color: Colors.amber)),
+              const Spacer(),
+              _item(context, selectedUpgrades[0]),
+              _item(context, selectedUpgrades[1]),
+              _item(context, selectedUpgrades[2]),
+            ]),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }

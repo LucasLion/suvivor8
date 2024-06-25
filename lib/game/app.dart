@@ -5,7 +5,7 @@ import 'package:suvivor8/game/survivor8_game.dart';
 import 'package:suvivor8/pages/gameover_page.dart';
 import 'package:suvivor8/pages/level_up_page.dart';
 import 'package:suvivor8/pages/loading_page.dart';
-import 'package:suvivor8/settings.dart';
+import 'package:suvivor8/game/settings.dart';
 import 'package:suvivor8/widgets/joystick.dart';
 
 class GameApp extends StatefulWidget {
@@ -65,7 +65,6 @@ class Survivor8GameWidgetState extends State<Survivor8GameWidget> {
 
   void resetGame() {
     setState(() {
-      shootSpeed = 0.8;
       bulletSpeed = 300;
       spawnSpeed = 1.0;
       enemies = 0;

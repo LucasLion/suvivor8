@@ -1,18 +1,19 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
-import 'package:suvivor8/enemy.dart';
+import 'package:suvivor8/game/enemy.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
+import 'package:suvivor8/game/settings.dart';
 
 class Weapon extends PositionComponent
     with HasGameRef<Survivor8Game>, CollisionCallbacks {
-  late SpriteSheet spriteSheet;
   late Vector2 direction;
+
 
   Weapon(
     Vector2 position,
     this.direction,
-    this.spriteSheet,
+    shootSpeed,
   ) : super(
           position: Vector2(position.x, position.y),
           size: Vector2(32, 32),

@@ -1,7 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
-import 'package:suvivor8/player.dart';
+import 'package:suvivor8/game/player.dart';
 
 class WallComponent extends SpriteComponent
     with HasGameRef<Survivor8Game>, CollisionCallbacks {

@@ -1,7 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
-import 'package:suvivor8/settings.dart';
+import 'package:suvivor8/game/settings.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 
 class Xp extends SpriteComponent

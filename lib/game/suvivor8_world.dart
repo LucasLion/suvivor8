@@ -6,12 +6,12 @@ import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:suvivor8/settings.dart';
-import 'package:suvivor8/enemy.dart';
+import 'package:suvivor8/game/settings.dart';
+import 'package:suvivor8/game/enemy.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
-import 'package:suvivor8/player.dart';
+import 'package:suvivor8/game/player.dart';
 import 'package:suvivor8/widgets/game_joystick.dart';
-import 'package:suvivor8/xp.dart';
+import 'package:suvivor8/game/xp.dart';
 
 class Survivor8World extends World
     with HasGameRef<Survivor8Game>, TapCallbacks {

@@ -11,11 +11,11 @@
             "scaleInEditor": 4
         },
         "/home/noil/code/suvivor8/assets/tiles/map.tmx": {
-            "scale": 4.442,
-            "selectedLayer": 0,
+            "scale": 3.4948,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 1613.5749662314272,
-                "y": 1574.628545700135
+                "x": 1574.7682270802334,
+                "y": 1426.8341535996337
             }
         },
         "/home/noil/code/suvivor8/assets/tiles/map.tmx#tileset": {

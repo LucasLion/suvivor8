@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:suvivor8/settings.dart';
+import 'package:suvivor8/game/settings.dart';
 import 'package:suvivor8/game/suvivor8_world.dart';
 
 class Survivor8Game extends FlameGame<Survivor8World>

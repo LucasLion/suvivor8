@@ -3,10 +3,10 @@ import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:suvivor8/weapons/bullet.dart';
 import 'package:suvivor8/weapons/machine_gun.dart';
-import 'package:suvivor8/settings.dart';
+import 'package:suvivor8/game/settings.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 import 'package:suvivor8/weapons/ring.dart';
-import 'package:suvivor8/xp.dart';
+import 'package:suvivor8/game/xp.dart';
 
 class Enemy extends SpriteAnimationComponent
     with HasGameRef<Survivor8Game>, CollisionCallbacks {
