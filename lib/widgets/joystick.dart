@@ -54,7 +54,7 @@ class _JoystickAreaCustomState extends State<JoystickAreaCustom>
         drawArrows: true,
       ),
       stick: const JoystickStick(
-        size: 12 ,
+        size: 120,
       ),
     );
   }

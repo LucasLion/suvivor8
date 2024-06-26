@@ -38,8 +38,16 @@ List<Upgrade> upgrades = [
       id: 'shootSpeed (rings)',
       name: 'shoot Speed Rings',
       description: 'Increase the speed of the rings',
-    image: const AssetImage('assets/images/weapons/ring-of-fire.png'),
+      image: const AssetImage('assets/images/weapons/ring-of-fire.png'),
       action: (game) {
         game.world.player.ring.upgrade('rotationSpeed');
+      }),
+  Upgrade(
+      id: 'magnet',
+      name: 'magnet',
+      description: 'Increase the magnet range',
+      image: const AssetImage('assets/images/weapons/magnet.png'),
+      action: (game) {
+        game.world.player.magneticRadius += 10;
       })
 ];

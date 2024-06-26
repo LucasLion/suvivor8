@@ -132,10 +132,10 @@ class Player extends SpriteAnimationComponent
     }
 
     // ---------------- remove xp -----------------
-    xpToRemove.forEach((xp) {
+    for (var xp in xpToRemove) {
       xp.removeFromParent();
       xpList.remove(xp);
-    });
+    }
     xpToRemove.clear();
     // ---------------- Death -----------------
     if (lifeBarNotifier.value <= 0) {

@@ -11,7 +11,6 @@ import 'package:suvivor8/game/enemy.dart';
 import 'package:suvivor8/game/survivor8_game.dart';
 import 'package:suvivor8/game/player.dart';
 import 'package:suvivor8/widgets/game_joystick.dart';
-import 'package:suvivor8/game/xp.dart';
 
 class Survivor8World extends World
     with HasGameRef<Survivor8Game>, TapCallbacks {

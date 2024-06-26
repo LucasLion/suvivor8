@@ -40,6 +40,12 @@ class Player extends SpriteAnimationComponent
   late SpriteAnimation animationWalkBackRight;
   late SpriteAnimation animationWalkBackLeft;
 
+  // hit animations
+  late SpriteAnimation animationHitFrontRight;
+  late SpriteAnimation animationHitFrontLeft;
+  late SpriteAnimation animationHitBackRight;
+  late SpriteAnimation animationHitBackLeft;
+
   Player({
     required Function(double, double) onMove,
   }) : super(
@@ -50,15 +56,6 @@ class Player extends SpriteAnimationComponent
   @override
   void onLoad() async {
     super.onLoad();
-
-    // ---------------- ring -----------------
-    // const numberOfRings = 1;
-    // const fullCircle = 2 * pi;
-    // for (var i = 0; i < numberOfRings; i++) {
-    //   final startingPoint = fullCircle * i / numberOfRings;
-    //   gameRef.world.add(Ring(position, startingPoint));
-    // }
-
     // ---------------- animation -----------------
     animationIdleFrontRight =
         await animate(spriteSheetHumanIdle, 0, 0, 16, 0.1);
@@ -69,6 +66,13 @@ class Player extends SpriteAnimationComponent
     animationWalkFrontLeft = await animate(spriteSheetHumanWalk, 1, 0, 4, 0.1);
     animationWalkBackRight = await animate(spriteSheetHumanWalk, 2, 0, 4, 0.1);
     animationWalkBackLeft = await animate(spriteSheetHumanWalk, 3, 0, 4, 0.1);
+
+    animationHitFrontRight =
+        await animate(spriteSheetHumanDamage, 0, 0, 4, 0.1);
+    animationHitFrontLeft = await animate(spriteSheetHumanDamage, 1, 0, 4, 0.1);
+    animationHitBackRight = await animate(spriteSheetHumanDamage, 2, 0, 4, 0.1);
+    animationHitBackLeft = await animate(spriteSheetHumanDamage, 3, 0, 4, 0.1);
+
     animation = animationIdleFrontRight;
 
     // ---------------- hitbox -----------------
@@ -82,14 +86,9 @@ class Player extends SpriteAnimationComponent
 
     anchor = Anchor.center;
     last = Vector2(0, 1);
-    scale = Vector2(4, 4);
+    scale = Vector2(5, 5);
 
     // ---------------- first weapon -----------------
-    // final image = await gameRef.images.load(bulletsYellow);
-    // final spriteSheet = SpriteSheet(
-    //   image: image,
-    //   srcSize: Vector2(16, 16),
-    // );
     machineGun = MachineGun(position, last, 0.8, 1);
     weapons.add(machineGun);
     gameRef.world.add(machineGun);
@@ -132,10 +131,10 @@ class Player extends SpriteAnimationComponent
     }
 
     // ---------------- remove xp -----------------
-    xpToRemove.forEach((xp) {
+    for (var xp in xpToRemove) {
       xp.removeFromParent();
       xpList.remove(xp);
-    });
+    }
     xpToRemove.clear();
     // ---------------- Death -----------------
     if (lifeBarNotifier.value <= 0) {
@@ -200,7 +199,6 @@ class Player extends SpriteAnimationComponent
     levelNotifier.value += 1;
     maxXpNotifier.value = levels[levelNotifier.value];
     xpNotifier.value = 0;
-    magneticRadius += 15;
     spawnSpeed *= 0.75;
     game.overlays.add('levelUp');
   }
@@ -216,14 +214,16 @@ class Player extends SpriteAnimationComponent
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
+    if (other is Enemy) {
+
+      animation = animationIdleFrontRight;
+      lifeBarNotifier.value -= lifeBarNotifier.value > 0 ? 10 : 0;
+    }
     if (other is Xp) {
       other.removeFromParent();
       // xpList.remove(other);
       xpToRemove.add(other);
-      xpNotifier.value += 1;
-    }
-    if (other is Enemy) {
-      lifeBarNotifier.value -= lifeBarNotifier.value > 0 ? 10 : 0;
+      xpNotifier.value += 2;
     }
   }
 }

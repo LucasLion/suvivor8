@@ -12,13 +12,15 @@ class Ring extends Weapon {
   double angle = 0;
   final double startingPoint;
   Vector2 playerPosition;
-  double radius = 150;
+  double radius = 50;
   double speed = 0.01;
   late SpriteSheet spriteSheet;
   late Sprite sprite;
   BulletMoveType moveType = BulletMoveType.spin;
   int numberOfRings = 1;
+  int maxNumberOfRings = 8;
   double rotationSpeed = 1;
+  double maxRotationSpeed = 5;
   List<Bullet> currentRings = [];
 
   Ring(this.playerPosition, this.startingPoint)
@@ -55,19 +57,18 @@ class Ring extends Weapon {
   }
 
   void upgrade(String type) {
-    if (type == 'rotationSpeed') {
-      rotationSpeed += 1;
-      currentRings.forEach((ring) {
+    if (type == 'rotationSpeed' && rotationSpeed < maxRotationSpeed) {
+      rotationSpeed += 0.3;
+      for (var ring in currentRings) {
         ring.rotationSpeed = rotationSpeed;
-      });
-    } else if (type == 'number') {
+      }
+    } else if (type == 'number' && numberOfRings < maxNumberOfRings) {
       int desiredNumberOfRings = numberOfRings + 1;
       double newAngleIncrement = (2 * pi) / desiredNumberOfRings;
-      double radius = 100;
 
-      currentRings.forEach((ring) {
+      for (var ring in currentRings) {
         gameRef.world.remove(ring);
-      });
+      }
       currentRings.clear();
       List<Bullet> newRings = [];
       for (int i = 0; i < desiredNumberOfRings; i++) {
@@ -76,16 +77,12 @@ class Ring extends Weapon {
             Bullet(Vector2(x, y), size, sprite, moveType, angle, rotationSpeed);
         newRings.add(newRing);
       }
-      newRings.forEach((newRing) {
+      for (var newRing in newRings) {
         currentRings.add(newRing);
         gameRef.world.add(newRing);
-      });
+      }
       numberOfRings = desiredNumberOfRings;
     }
   }
 
-  @override
-  void update(double dt) {
-    super.update(dt);
-  }
 }

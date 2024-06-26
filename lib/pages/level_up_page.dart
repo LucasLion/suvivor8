@@ -15,8 +15,17 @@ class LevelUpPageState extends State<LevelUpPage>
     with SingleTickerProviderStateMixin {
 
   List<Upgrade> getRandomUpgrades(int count) {
-    upgrades.shuffle();
-    return upgrades.take(count).toList();
+    List<Upgrade> filtered = upgrades.where((upgrade) {
+      if (upgrade.id == 'number (rings)' &&
+          widget.game.world.player.ring.numberOfRings >=
+              widget.game.world.player.ring.maxNumberOfRings) {
+        print('condition entered');
+        return false;
+      }
+      return true;
+    }).toList();
+    filtered.shuffle();
+    return filtered.take(count).toList();
   }
 
   Widget _item(BuildContext context, Upgrade upgrade) {
@@ -56,8 +65,7 @@ class LevelUpPageState extends State<LevelUpPage>
                     child: _text(upgrade.name),
                   ),
                   Expanded(
-                    flex:
-                        1,
+                    flex: 1,
                     child: _text(upgrade.id),
                   ),
                 ],
@@ -69,13 +77,11 @@ class LevelUpPageState extends State<LevelUpPage>
   }
 
   Widget _text(String text) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontSize: 40,
-      )
-    );
+    return Text(text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontSize: 40,
+        ));
   }
 
   Widget _image(AssetImage image) {

@@ -28,10 +28,6 @@ class Weapon extends PositionComponent
     gameRef.world.add(this);
   }
 
-  @override
-  void update(double dt) {
-    super.update(dt);
-  }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
